@@ -18,6 +18,9 @@ class MultipleChoiceApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: 'NovaSlim',
+        textTheme: const TextTheme(
+          bodyText1: TextStyle(fontSize: AppConfig.fontSize),
+        ),
       ),
       home: const MyHomePage(title: 'Trivia Guru'),
     );
@@ -53,16 +56,26 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red, width: 1.0),
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: getWidgetList(),
+      constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Center(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: getWidgetList(),
+              ),
+            ),
           ),
         ),
       ),
@@ -72,34 +85,38 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> getWidgetList() {
     List<Widget> widgetList = [];
 
-    widgetList.add(Container(
-      margin: const EdgeInsets.all(10.0),
-      padding: const EdgeInsets.all(3.0),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 0, 255),
-        border: Border.all(color: Colors.black, width: 1.0),
+    widgetList.add(
+      Container(
+        margin: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(3.0),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 0, 0, 255),
+          border: Border.all(color: Colors.black, width: 1.0),
+        ),
+        child: Text(
+          question.question,
+          style: const TextStyle(
+              fontSize: AppConfig.fontSize, color: Colors.white),
+        ),
       ),
-      child: Text(
-        question.question,
-        style:
-            const TextStyle(fontSize: AppConfig.fontSize, color: Colors.white),
+    );
+    widgetList.add(
+      Container(
+        width: double.infinity,
+        margin: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black, width: 1.0),
+        ),
+        child: const Text(
+          "Select an answer:",
+          style: TextStyle(
+              fontSize: AppConfig.fontSize,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 0, 0, 255)),
+        ),
       ),
-    ));
-    widgetList.add(Container(
-      width: double.infinity,
-      margin: const EdgeInsets.all(5.0),
-      padding: const EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black, width: 1.0),
-      ),
-      child: const Text(
-        "Select an answer:",
-        style: TextStyle(
-            fontSize: AppConfig.fontSize,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 0, 0, 255)),
-      ),
-    ));
+    );
     answerButtonList.clear();
     for (int i = 0; i < AppConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
@@ -112,10 +129,12 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: () {
-              selection = i + 1;
-              processAnswer();
-            },
+            onPressed: disableAnswerButtons
+                ? null
+                : () {
+                    selection = i + 1;
+                    processAnswer();
+                  },
             style: TextButton.styleFrom(
                 backgroundColor: buttonColor, shadowColor: buttonColor),
             child: Text(
@@ -128,7 +147,18 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       widgetList.add(answerButtonList[i]);
     }
-
+    Divider divider = const Divider(
+      color: Colors.red,
+      height: 30.0,
+      thickness: 2.0,
+    );
+    widgetList.add(divider);
+    Container answerContainer = Container(
+      margin: const EdgeInsets.all(10.0),
+      child: Text(question.answerText,
+          style: Theme.of(context).textTheme.bodyText1),
+    );
+    widgetList.add(answerContainer);
     return widgetList;
   }
 }
