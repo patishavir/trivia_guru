@@ -32,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int selection = 0;
+  List<TextButton> answerButtonList = [];
   Question question = QuestionsUtil.getQuestion();
 
   void processAnswer() {
@@ -80,15 +81,24 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       child: const Text("Select an answer:"),
     ));
+    answerButtonList.clear();
     for (int i = 0; i < Config.answersCount; i++) {
-      widgetList.add(
+      LoggingUtils.writeLog('iteration number: $i');
+      answerButtonList.add(
         TextButton(
           onPressed: () {
             selection = i + 1;
+            processAnswer();
           },
+          style: TextButton.styleFrom(
+              backgroundColor:
+                  (question.answer == selection && selection == i + 1)
+                      ? Colors.green
+                      : Colors.red),
           child: Text(question.answers[i]),
         ),
       );
+      widgetList.add(answerButtonList[i]);
     }
     widgetList.add(
       Container(

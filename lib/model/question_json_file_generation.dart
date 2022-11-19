@@ -12,10 +12,10 @@ main() async {
   LoggingUtils.writeLog(q1.toJson().toString());
   const JsonEncoder encoder = JsonEncoder.withIndent('  ');
   try {
-    String str = encoder.convert(q1);
-    LoggingUtils.writeLog(str);
+    String jsonString = encoder.convert(q1);
+    LoggingUtils.writeLog(jsonString);
     const filename = 'c:\\temp\\dartfile.txt';
-    var file = await File(filename).writeAsString(str);
+    var file = await File(filename).writeAsString(jsonString);
     LoggingUtils.writeLog('${file.absolute} has been successfully written !');
   } catch (e) {
     LoggingUtils.writeLog(e.toString());
