@@ -3,7 +3,7 @@ import 'dart:io';
 
 import '../common/logging_utils.dart';
 import '../objects/question.dart';
-import '../objects/questions_utils.dart';
+import 'questions_utils.dart';
 
 main() async {
   LoggingUtils.initLogging();
