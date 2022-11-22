@@ -14,6 +14,7 @@ class MultipleChoiceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Trivia Guru',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -37,14 +38,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool disableAnswerButtons = false;
+  bool waitingForAnAnswer = true;
   int selection = 0;
-  List<Widget> answerButtonList = [];
+  int correctAnswers = 0;
+  int wrongAnswers = 0;
+
   Question question = QuestionsUtil.getQuestion();
 
   void processAnswer() {
     setState(() {
-      disableAnswerButtons = true;
+      waitingForAnAnswer = false;
       LoggingUtils.writeLog('selection: $selection');
       if (question.answer == selection) {
         LoggingUtils.writeLog('$selection is the correct answer');
@@ -84,6 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Widget> getWidgetList() {
     List<Widget> widgetList = [];
+    List<Widget> answerButtonList = [];
 
     widgetList.add(
       Container(
@@ -118,23 +122,29 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     answerButtonList.clear();
+    bool correctAnswer = question.answer == selection;
     for (int i = 0; i < AppConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
       if (selection == i + 1) {
-        buttonColor =
-            (question.answer == selection) ? Colors.green : Colors.red;
+        if (correctAnswer) {
+          buttonColor = Colors.green;
+          correctAnswers++;
+        } else {
+          buttonColor = Colors.red;
+          wrongAnswers++;
+        }
       }
       answerButtonList.add(
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: disableAnswerButtons
-                ? null
-                : () {
+            onPressed: waitingForAnAnswer
+                ? () {
                     selection = i + 1;
                     processAnswer();
-                  },
+                  }
+                : null,
             style: TextButton.styleFrom(
                 backgroundColor: buttonColor, shadowColor: buttonColor),
             child: Text(
@@ -147,18 +157,47 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       widgetList.add(answerButtonList[i]);
     }
-    Divider divider = const Divider(
+    // add divider
+    widgetList.add(const Divider(
       color: Colors.red,
-      height: 30.0,
+      height: 5.0,
       thickness: 2.0,
-    );
-    widgetList.add(divider);
-    Container answerContainer = Container(
+    ));
+    // add answer text
+    if (!waitingForAnAnswer) {
+      widgetList.add(
+        Container(
+            margin: const EdgeInsets.all(10.0),
+            child: Text(question.answerText,
+                style: Theme.of(context).textTheme.bodyText1)),
+      );
+    }
+    Container bottomRowContainer = Container(
       margin: const EdgeInsets.all(10.0),
-      child: Text(question.answerText,
-          style: Theme.of(context).textTheme.bodyText1),
+      child: Row(
+        children: [
+          Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
+          Text(
+            correctAnswers.toString(),
+            style: const TextStyle(
+                fontSize: AppConfig.fontSize,
+                backgroundColor: Colors.green,
+                color: Colors.white),
+          ),
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            wrongAnswers.toString(),
+            style: const TextStyle(
+                fontSize: AppConfig.fontSize,
+                backgroundColor: Colors.red,
+                color: Colors.white),
+          )
+        ],
+      ),
     );
-    widgetList.add(answerContainer);
+    widgetList.add(bottomRowContainer);
     return widgetList;
   }
 }
