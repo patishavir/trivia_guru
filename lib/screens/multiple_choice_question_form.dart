@@ -37,26 +37,37 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool waitingForAnAnswer = true;
-  int selection = 0;
+  int questionIndex = 0;
+  int selectedAnswer = 0;
   int correctAnswers = 0;
   int wrongAnswers = 0;
 
-  Question question = QuestionsUtil.getQuestion();
+  late Question question;
 
   void processAnswer() {
     setState(() {
       waitingForAnAnswer = false;
-      LoggingUtils.writeLog('selection: $selection');
-      if (question.answer == selection) {
-        LoggingUtils.writeLog('$selection is the correct answer');
+      LoggingUtils.writeLog('selected answer: $selectedAnswer');
+      if (question.answer == selectedAnswer) {
+        LoggingUtils.writeLog('$selectedAnswer is the correct answer');
       } else {
-        LoggingUtils.writeLog('$selection is a wrong answer');
+        LoggingUtils.writeLog('$selectedAnswer is a wrong answer');
       }
     });
   }
 
+  void processNextButton() {
+    setState(
+      () {
+        waitingForAnAnswer = true;
+        questionIndex++;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    question = QuestionsUtil.getQuestion(questionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -120,11 +131,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     answerButtonList.clear();
-    bool correctAnswer = question.answer == selection;
+    bool correctAnswer = question.answer == selectedAnswer;
     for (int i = 0; i < AppConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
-      if (selection == i + 1) {
+      if (selectedAnswer == i + 1) {
         if (correctAnswer) {
           buttonColor = Colors.green;
           correctAnswers++;
@@ -139,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: TextButton(
             onPressed: waitingForAnAnswer
                 ? () {
-                    selection = i + 1;
+                    selectedAnswer = i + 1;
                     processAnswer();
                   }
                 : null,
@@ -172,37 +183,64 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
-    Container bottomRowContainer = Container(
-      margin: const EdgeInsets.all(10.0),
-      child: Row(
-        children: [
-          Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
-          Text(
-            correctAnswers.toString(),
-            style: const TextStyle(
-                fontSize: AppConfig.fontSize,
-                backgroundColor: Colors.green,
-                color: Colors.white),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-            wrongAnswers.toString(),
-            style: const TextStyle(
-                fontSize: AppConfig.fontSize,
-                backgroundColor: Colors.red,
-                color: Colors.white),
-          ),
-          const Spacer(),
-          const IconButton(
-              icon: Icon(Icons.arrow_right),
-              onPressed: null,
-              iconSize: 100,
-              color: Colors.blue),
-        ],
+    Widget bottomRowContainer = Container(
+      child: Container(
+        margin: const EdgeInsets.all(10.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
+            Text(
+              correctAnswers.toString(),
+              style: const TextStyle(
+                  fontSize: AppConfig.fontSize,
+                  backgroundColor: Colors.green,
+                  color: Colors.white),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              wrongAnswers.toString(),
+              style: const TextStyle(
+                  fontSize: AppConfig.fontSize,
+                  backgroundColor: Colors.red,
+                  color: Colors.white),
+            ),
+            const Spacer(),
+            Material(
+              type: MaterialType.transparency,
+              child: Ink(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey, width: 3.0),
+                  color: Colors.blue.shade600,
+                  shape: BoxShape.circle,
+                ),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(500.0),
+                  onTap: waitingForAnAnswer
+                      ? null
+                      : () {
+                          selectedAnswer = 0;
+                          waitingForAnAnswer = true;
+                          processNextButton();
+                        },
+                  child: const Padding(
+                    padding: EdgeInsets.all(3.0),
+                    child: Icon(
+                      Icons.arrow_right,
+                      size: 30.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
+
     widgetList.add(bottomRowContainer);
 
     return widgetList;

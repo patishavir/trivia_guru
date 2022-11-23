@@ -1,15 +1,22 @@
+import 'package:trivia_guru/config/app_config.dart';
+
 import '../objects/question.dart';
 
 class QuestionsUtil {
-  static Question getQuestion() {
+  static Question getQuestion(int questionIndex) {
     String question = 'How old are you?';
     int answer = 4;
     String answerText =
-        'I was born in 1929 therefore I am Thirty seven now. God bless !';
-    List<String> answers = [
+        'I was born in 1929 therefore I am Thirty seven now.\nGod bless !\nViva Espania';
+    List<String> answers = [];
+    for (int i = 0; i < AppConfig.answersCount; i++) {
+      int currentValue = questionIndex + i;
+      answers.add(currentValue.toString());
+    }
+    List<String> answerz = [
       'ten',
       'twenty',
-      'lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id volutpat libero. id molestie ex ex quis nunc. Curabitur eget tellus sodales, tristique erat ut, facilisis sapien.. et molestie ex ex quis nunc. Curabitur eget tellus sodales, tristique erat ut, facilisis sapien..',
+      'lorem ipsum dolor sit amet, consectetur adipiscing elit. id molestie ex ex quis nunc. Curabitur eget tellus sodales, tristique erat ut, facilisis sapien.. et molestie ex ex quis nunc.',
       'thrity seven'
     ];
     int difficulty = 1;

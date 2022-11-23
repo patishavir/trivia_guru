@@ -4,6 +4,7 @@ import 'package:trivia_guru/config/app_config.dart';
 
 class LoggingUtils {
   static late Logger log;
+
   static initLogging() {
     if (AppConfig.writeLog) {
       log = Logger('AppLogger');
