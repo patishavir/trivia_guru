@@ -97,94 +97,107 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Widget> getWidgetList() {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
-
-    widgetList.add(
-      Container(
-        margin: const EdgeInsets.all(10.0),
-        padding: const EdgeInsets.all(3.0),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 0, 0, 255),
-          border: Border.all(color: Colors.black, width: 1.0),
+    Container bottomRowContainer;
+    if (questionIndex >= AppConfig.questionsPerGame) {
+      widgetList.add(
+        Stack(
+          alignment: Alignment.center,
+          children: const [
+            Text(
+              "All done !",
+              style: TextStyle(
+                  fontSize: AppConfig.fontSize, backgroundColor: Colors.grey),
+            ),
+          ],
         ),
-        child: Text(
-          question.question,
-          style: const TextStyle(
-              fontSize: AppConfig.fontSize, color: Colors.white),
-        ),
-      ),
-    );
-    widgetList.add(
-      Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1.0),
-        ),
-        child: const Text(
-          "Select an answer:",
-          style: TextStyle(
-              fontSize: AppConfig.fontSize,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 0, 0, 255)),
-        ),
-      ),
-    );
-    answerButtonList.clear();
-    bool correctAnswer = question.answer == selectedAnswer;
-    for (int i = 0; i < AppConfig.answersCount; i++) {
-      LoggingUtils.writeLog('iteration number: $i');
-      Color? buttonColor = Colors.grey[400];
-      if (selectedAnswer == i + 1) {
-        if (correctAnswer) {
-          buttonColor = Colors.green;
-          correctAnswers++;
-        } else {
-          buttonColor = Colors.red;
-          wrongAnswers++;
-        }
-      }
-      answerButtonList.add(
+      );
+    } else {
+      widgetList.add(
         Container(
           margin: const EdgeInsets.all(10.0),
-          child: TextButton(
-            onPressed: waitingForAnAnswer
-                ? () {
-                    selectedAnswer = i + 1;
-                    processAnswer();
-                  }
-                : null,
-            style: TextButton.styleFrom(
-                backgroundColor: buttonColor, shadowColor: buttonColor),
-            child: Text(
-              question.answers[i],
-              style: const TextStyle(
-                  color: Colors.black, fontSize: AppConfig.fontSize),
-            ),
+          padding: const EdgeInsets.all(3.0),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 0, 0, 255),
+            border: Border.all(color: Colors.black, width: 1.0),
+          ),
+          child: Text(
+            question.question,
+            style: const TextStyle(
+                fontSize: AppConfig.fontSize, color: Colors.white),
           ),
         ),
       );
-      widgetList.add(answerButtonList[i]);
-    }
-
-    // add divider
-    widgetList.add(const Divider(
-      color: Colors.red,
-      height: 5.0,
-      thickness: 2.0,
-    ));
-    // add answer text
-    if (!waitingForAnAnswer) {
       widgetList.add(
         Container(
-            margin: const EdgeInsets.all(10.0),
-            child: Text(question.answerText,
-                style: Theme.of(context).textTheme.bodyText1)),
+          width: double.infinity,
+          margin: const EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 1.0),
+          ),
+          child: const Text(
+            "Select an answer:",
+            style: TextStyle(
+                fontSize: AppConfig.fontSize,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 0, 0, 255)),
+          ),
+        ),
       );
-    }
+      answerButtonList.clear();
+      bool correctAnswer = question.answer == selectedAnswer;
+      for (int i = 0; i < AppConfig.answersCount; i++) {
+        LoggingUtils.writeLog('iteration number: $i');
+        Color? buttonColor = Colors.grey[400];
+        if (selectedAnswer == i + 1) {
+          if (correctAnswer) {
+            buttonColor = Colors.green;
+            correctAnswers++;
+          } else {
+            buttonColor = Colors.red;
+            wrongAnswers++;
+          }
+        }
+        answerButtonList.add(
+          Container(
+            margin: const EdgeInsets.all(10.0),
+            child: TextButton(
+              onPressed: waitingForAnAnswer
+                  ? () {
+                      selectedAnswer = i + 1;
+                      processAnswer();
+                    }
+                  : null,
+              style: TextButton.styleFrom(
+                  backgroundColor: buttonColor, shadowColor: buttonColor),
+              child: Text(
+                question.answers[i],
+                style: const TextStyle(
+                    color: Colors.black, fontSize: AppConfig.fontSize),
+              ),
+            ),
+          ),
+        );
+        widgetList.add(answerButtonList[i]);
+      }
 
-    Widget bottomRowContainer = Container(
-      child: Container(
+      // add divider
+      widgetList.add(const Divider(
+        color: Colors.red,
+        height: 5.0,
+        thickness: 2.0,
+      ));
+      // add answer text
+      if (!waitingForAnAnswer) {
+        widgetList.add(
+          Container(
+              margin: const EdgeInsets.all(10.0),
+              child: Text(question.answerText,
+                  style: Theme.of(context).textTheme.bodyText1)),
+        );
+      }
+
+      Container bottomRowContainer = Container(
         margin: const EdgeInsets.all(10.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -238,11 +251,9 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ],
         ),
-      ),
-    );
-
-    widgetList.add(bottomRowContainer);
-
+      );
+      widgetList.add(bottomRowContainer);
+    }
     return widgetList;
   }
 }
