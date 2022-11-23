@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 import '../common/logging_utils.dart';
@@ -157,6 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
       );
       widgetList.add(answerButtonList[i]);
     }
+
     // add divider
     widgetList.add(const Divider(
       color: Colors.red,
@@ -172,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: Theme.of(context).textTheme.bodyText1)),
       );
     }
+
     Container bottomRowContainer = Container(
       margin: const EdgeInsets.all(10.0),
       child: Row(
@@ -193,11 +193,18 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: AppConfig.fontSize,
                 backgroundColor: Colors.red,
                 color: Colors.white),
-          )
+          ),
+          const Spacer(),
+          const IconButton(
+              icon: Icon(Icons.arrow_right),
+              onPressed: null,
+              iconSize: 100,
+              color: Colors.blue),
         ],
       ),
     );
     widgetList.add(bottomRowContainer);
+
     return widgetList;
   }
 }
