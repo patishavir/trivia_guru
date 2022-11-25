@@ -1,3 +1,4 @@
+import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
 
 import '../common/logging_utils.dart';
@@ -100,15 +101,18 @@ class _MyHomePageState extends State<MyHomePage> {
     Container bottomRowContainer;
     if (questionIndex >= AppConfig.questionsPerGame) {
       widgetList.add(
-        Stack(
-          alignment: Alignment.center,
-          children: const [
-            Text(
-              "All done !",
-              style: TextStyle(
-                  fontSize: AppConfig.fontSize, backgroundColor: Colors.grey),
-            ),
-          ],
+        Container(
+          margin: const EdgeInsets.only(top: 100.0),
+          padding: const EdgeInsets.all(30.0),
+          color: Colors.pink,
+          child: BlinkText(
+              'You have answered correctly\n$correctAnswers out of ${AppConfig.questionsPerGame} questions ! ',
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: AppConfig.fontSize),
+              beginColor: Colors.yellowAccent,
+              endColor: Colors.white,
+              times: 20,
+              duration: const Duration(milliseconds: 500)),
         ),
       );
     } else {

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
+import '../config/app_config.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -78,7 +79,8 @@ class ConfettiPageState extends State<ConfettiPage> {
   }
 
   Future<void> stopController() {
-    return Future.delayed(const Duration(seconds: 2), () {
+    return Future.delayed(
+        const Duration(seconds: AppConfig.confettiAnimationDuration), () {
       confettiController.stop();
       print('controller has stopped');
       Navigator.of(context).pop();
