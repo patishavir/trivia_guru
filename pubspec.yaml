@@ -39,6 +39,7 @@ dependencies:
   logging: ^1.1.0
   build_runner: ^2.3.2
   build_web_compilers: ^3.2.7
+  confetti: ^0.7.0
 
 dev_dependencies:
   flutter_test:
