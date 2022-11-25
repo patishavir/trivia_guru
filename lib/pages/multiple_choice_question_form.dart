@@ -1,8 +1,8 @@
-import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
 
 import '../common/logging_utils.dart';
 import '../config/app_config.dart';
+import '../config/game_data.dart';
 import '../objects/question.dart';
 import '../utils/questions_utils.dart';
 
@@ -37,22 +37,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool waitingForAnAnswer = true;
-  int questionIndex = 0;
-  int selectedAnswer = 0;
-  int correctAnswers = 0;
-  int wrongAnswers = 0;
-
   late Question question;
 
   void processAnswer() {
     setState(() {
-      waitingForAnAnswer = false;
-      LoggingUtils.writeLog('selected answer: $selectedAnswer');
-      if (question.answer == selectedAnswer) {
-        LoggingUtils.writeLog('$selectedAnswer is the correct answer');
+      GameData.waitingForAnAnswer = false;
+      LoggingUtils.writeLog('selected answer: $GameData.selectedAnswer');
+      if (question.answer == GameData.selectedAnswer) {
+        LoggingUtils.writeLog('$GameData.selectedAnswer is the correct answer');
       } else {
-        LoggingUtils.writeLog('$selectedAnswer is a wrong answer');
+        LoggingUtils.writeLog('$GameData.selectedAnswer is a wrong answer');
       }
     });
   }
@@ -60,15 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
   void processNextButton() {
     setState(
       () {
-        waitingForAnAnswer = true;
-        questionIndex++;
+        GameData.waitingForAnAnswer = true;
+        GameData.questionIndex++;
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    question = QuestionsUtil.getQuestion(questionIndex);
+    question = QuestionsUtil.getQuestion(GameData.questionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -99,22 +93,8 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
     Container bottomRowContainer;
-    if (questionIndex >= AppConfig.questionsPerGame) {
-      widgetList.add(
-        Container(
-          margin: const EdgeInsets.only(top: 100.0),
-          padding: const EdgeInsets.all(30.0),
-          color: Colors.pink,
-          child: BlinkText(
-              'You have answered correctly\n$correctAnswers out of ${AppConfig.questionsPerGame} questions ! ',
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: AppConfig.fontSize),
-              beginColor: Colors.yellowAccent,
-              endColor: Colors.white,
-              times: 20,
-              duration: const Duration(milliseconds: 500)),
-        ),
-      );
+    if (GameData.questionIndex >= AppConfig.questionsPerGame) {
+      widgetList.add();
     } else {
       widgetList.add(
         Container(
@@ -149,26 +129,26 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
       answerButtonList.clear();
-      bool correctAnswer = question.answer == selectedAnswer;
+      bool correctAnswer = question.answer == GameData.selectedAnswer;
       for (int i = 0; i < AppConfig.answersCount; i++) {
         LoggingUtils.writeLog('iteration number: $i');
         Color? buttonColor = Colors.grey[400];
-        if (selectedAnswer == i + 1) {
+        if (GameData.selectedAnswer == i + 1) {
           if (correctAnswer) {
             buttonColor = Colors.green;
-            correctAnswers++;
+            GameData.correctAnswers++;
           } else {
             buttonColor = Colors.red;
-            wrongAnswers++;
+            GameData.wrongAnswers++;
           }
         }
         answerButtonList.add(
           Container(
             margin: const EdgeInsets.all(10.0),
             child: TextButton(
-              onPressed: waitingForAnAnswer
+              onPressed: GameData.waitingForAnAnswer
                   ? () {
-                      selectedAnswer = i + 1;
+                      GameData.selectedAnswer = i + 1;
                       processAnswer();
                     }
                   : null,
@@ -192,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
         thickness: 2.0,
       ));
       // add answer text
-      if (!waitingForAnAnswer) {
+      if (!GameData.waitingForAnAnswer) {
         widgetList.add(
           Container(
               margin: const EdgeInsets.all(10.0),
@@ -208,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
             Text(
-              correctAnswers.toString(),
+              GameData.correctAnswers.toString(),
               style: const TextStyle(
                   fontSize: AppConfig.fontSize,
                   backgroundColor: Colors.green,
@@ -218,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 8,
             ),
             Text(
-              wrongAnswers.toString(),
+              GameData.wrongAnswers.toString(),
               style: const TextStyle(
                   fontSize: AppConfig.fontSize,
                   backgroundColor: Colors.red,
@@ -235,11 +215,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 child: InkWell(
                   borderRadius: BorderRadius.circular(500.0),
-                  onTap: waitingForAnAnswer
+                  onTap: GameData.waitingForAnAnswer
                       ? null
                       : () {
-                          selectedAnswer = 0;
-                          waitingForAnAnswer = true;
+                          GameData.selectedAnswer = 0;
+                          GameData.waitingForAnAnswer = true;
                           processNextButton();
                         },
                   child: const Padding(
