@@ -4,6 +4,7 @@ import '../common/logging_utils.dart';
 import '../config/app_config.dart';
 import '../config/game_data.dart';
 import '../objects/question.dart';
+import '../pages/confetti_page.dart';
 import '../utils/questions_utils.dart';
 
 class MultipleChoiceApp extends StatelessWidget {
@@ -94,7 +95,13 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> answerButtonList = [];
     Container bottomRowContainer;
     if (GameData.questionIndex >= AppConfig.questionsPerGame) {
-      widgetList.add();
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          // Builder for the NextPage
+          // class's constructor.
+          builder: (context) => const ConfettiPage(),
+        ),
+      );
     } else {
       widgetList.add(
         Container(
