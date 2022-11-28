@@ -105,8 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     widgetList.add(
       Container(
-        margin: const EdgeInsets.all(10.0),
-        padding: const EdgeInsets.all(3.0),
+        margin: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(4.0),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 0, 0, 255),
           border: Border.all(color: Colors.black, width: 1.0),
@@ -118,23 +118,51 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-    widgetList.add(
-      Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(5.0),
-        padding: const EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black, width: 1.0),
-        ),
-        child: const Text(
-          "Select an answer:",
-          style: TextStyle(
-              fontSize: AppConfig.fontSize,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 0, 0, 255)),
-        ),
+    // next question container
+    widgetList.add(Container(
+      margin: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 0, 0, 255),
+        border: Border.all(color: Colors.black, width: 1.0),
       ),
-    );
+      child: GameData.waitingForAnAnswer
+          ? const Text(
+              "Select an answer:",
+              style: TextStyle(
+                fontSize: AppConfig.fontSize,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            )
+          : ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    const MaterialStatePropertyAll<Color>(Colors.white),
+                elevation: MaterialStateProperty.resolveWith<double>(
+                  (Set<MaterialState> states) {
+                    // if the button is pressed the elevation is 10.0, if not
+                    // it is 5.0
+                    if (states.contains(MaterialState.pressed)) {
+                      return 10.0;
+                    } else {
+                      return 10.0;
+                    }
+                  },
+                ),
+              ),
+              child: const Text(
+                "Next question >",
+                style: TextStyle(
+                    fontSize: AppConfig.fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 0, 0, 255)),
+              ),
+              onPressed: () {
+                processNextButton();
+              },
+            ),
+    ));
     answerButtonList.clear();
     bool correctAnswer = question.answer == GameData.selectedAnswer;
     for (int i = 0; i < AppConfig.answersCount; i++) {
@@ -187,63 +215,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: Theme.of(context).textTheme.bodyText1)),
       );
     }
-
-    Container bottomRowContainer = Container(
-      margin: const EdgeInsets.all(10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
-          Text(
-            GameData.correctAnswers.toString(),
-            style: const TextStyle(
-                fontSize: AppConfig.fontSize,
-                backgroundColor: Colors.green,
-                color: Colors.white),
-          ),
-          const SizedBox(
-            width: 8,
-          ),
-          Text(
-            GameData.wrongAnswers.toString(),
-            style: const TextStyle(
-                fontSize: AppConfig.fontSize,
-                backgroundColor: Colors.red,
-                color: Colors.white),
-          ),
-          const Spacer(),
-          Material(
-            type: MaterialType.transparency,
-            child: Ink(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 3.0),
-                color: Colors.blue.shade600,
-                shape: BoxShape.circle,
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(500.0),
-                onTap: GameData.waitingForAnAnswer
-                    ? null
-                    : () {
-                        GameData.selectedAnswer = 0;
-                        GameData.waitingForAnAnswer = true;
-                        processNextButton();
-                      },
-                child: const Padding(
-                  padding: EdgeInsets.all(3.0),
-                  child: Icon(
-                    Icons.arrow_right,
-                    size: 30.0,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-    widgetList.add(bottomRowContainer);
 
     return widgetList;
   }
