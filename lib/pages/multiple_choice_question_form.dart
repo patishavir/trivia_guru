@@ -119,49 +119,67 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
     // next question container
-    widgetList.add(Container(
-      margin: const EdgeInsets.all(4.0),
-      padding: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 0, 255),
-        border: Border.all(color: Colors.black, width: 1.0),
-      ),
-      child: GameData.waitingForAnAnswer
-          ? const Text(
-              "Select an answer:",
-              style: TextStyle(
-                fontSize: AppConfig.fontSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            )
-          : ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    const MaterialStatePropertyAll<Color>(Colors.white),
-                elevation: MaterialStateProperty.resolveWith<double>(
-                  (Set<MaterialState> states) {
-                    // if the button is pressed the elevation is 10.0, if not
-                    // it is 5.0
-                    if (states.contains(MaterialState.pressed)) {
-                      return 10.0;
-                    } else {
-                      return 10.0;
-                    }
-                  },
-                ),
-              ),
-              child: const Text(
-                "Next question >",
+    widgetList.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GameData.waitingForAnAnswer
+            ? const Text(
+                "Select an answer:",
                 style: TextStyle(
-                    fontSize: AppConfig.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 0, 0, 255)),
+                  fontSize: AppConfig.fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 255),
+                  backgroundColor: Colors.white,
+                ),
+              )
+            : ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor:
+                      const MaterialStatePropertyAll<Color>(Colors.white),
+                  elevation: MaterialStateProperty.resolveWith<double>(
+                    (Set<MaterialState> states) {
+                      // if the button is pressed the elevation is 10.0, if not
+                      // it is 5.0
+                      if (states.contains(MaterialState.pressed)) {
+                        return 10.0;
+                      } else {
+                        return 10.0;
+                      }
+                    },
+                  ),
+                ),
+                child: const Text(
+                  "Next question >",
+                  style: TextStyle(
+                      fontSize: AppConfig.fontSize,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 0, 0, 255)),
+                ),
+                onPressed: () {
+                  processNextButton();
+                },
               ),
-              onPressed: () {
-                processNextButton();
-              },
-            ),
+        Spacer(),
+        Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
+        Text(
+          GameData.correctAnswers.toString(),
+          style: const TextStyle(
+              fontSize: AppConfig.fontSize,
+              backgroundColor: Colors.green,
+              color: Colors.white),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Text(
+          GameData.wrongAnswers.toString(),
+          style: const TextStyle(
+              fontSize: AppConfig.fontSize,
+              backgroundColor: Colors.red,
+              color: Colors.white),
+        ),
+        const Spacer(),
+      ],
     ));
     answerButtonList.clear();
     bool correctAnswer = question.answer == GameData.selectedAnswer;
