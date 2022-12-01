@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
-import 'package:trivia_guru/config/app_config.dart';
+import 'package:trivia_guru/config/game_config.dart';
 
 class LoggingUtils {
-  static late Logger log;
+  static Logger? log;
 
-  static initLogging() {
-    if (AppConfig.writeLog) {
+  static _initLogging() {
+    if (GameConfig.writeLog) {
       log = Logger('AppLogger');
       Logger.root.level = Level.FINE; // defaults to Level.INFO
       Logger.root.onRecord.listen((record) {
@@ -18,8 +18,11 @@ class LoggingUtils {
   }
 
   static void writeLog(String message) {
-    if (AppConfig.writeLog) {
-      log.fine(message);
+    if (GameConfig.writeLog) {
+      if (log == null) {
+        _initLogging();
+      }
+      log?.fine(message);
     }
   }
 }

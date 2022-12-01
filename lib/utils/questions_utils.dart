@@ -1,4 +1,4 @@
-import 'package:trivia_guru/config/app_config.dart';
+import 'package:trivia_guru/config/game_config.dart';
 
 import '../objects/question.dart';
 
@@ -9,7 +9,7 @@ class QuestionsUtil {
     String answerText =
         'I was born in 1929 therefore I am Thirty seven now.\nGod bless !\nViva Espania';
     List<String> answers = [];
-    for (int i = 0; i < AppConfig.answersCount; i++) {
+    for (int i = 0; i < GameConfig.answersCount; i++) {
       int currentValue = questionIndex + i;
       answers.add(currentValue.toString());
     }

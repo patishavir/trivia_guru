@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../common/logging_utils.dart';
-import '../config/app_config.dart';
-import '../config/game_data.dart';
+import '../config/game_config.dart';
+import '../config/session_data.dart';
 import '../objects/question.dart';
 import '../pages/confetti_page.dart';
 import '../utils/questions_utils.dart';
@@ -20,7 +20,7 @@ class MultipleChoiceApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'NovaSlim',
         textTheme: const TextTheme(
-          bodyText1: TextStyle(fontSize: AppConfig.fontSize),
+          bodyText1: TextStyle(fontSize: GameConfig.fontSize),
         ),
       ),
       home: const MyHomePage(title: 'Trivia Guru'),
@@ -43,20 +43,21 @@ class _MyHomePageState extends State<MyHomePage> {
   void processAnswer() {
     setState(
       () {
-        GameData.waitingForAnAnswer = false;
-        LoggingUtils.writeLog('selected answer: $GameData.selectedAnswer');
-        if (question.answer == GameData.selectedAnswer) {
+        SessionData.waitingForAnAnswer = false;
+        LoggingUtils.writeLog('selected answer: $SessionData.selectedAnswer');
+        if (question.answer == SessionData.selectedAnswer) {
           LoggingUtils.writeLog(
-              '$GameData.selectedAnswer is the correct answer');
+              '$SessionData.selectedAnswer is the correct answer');
         } else {
-          LoggingUtils.writeLog('$GameData.selectedAnswer is a wrong answer');
+          LoggingUtils.writeLog(
+              '$SessionData.selectedAnswer is a wrong answer');
         }
       },
     );
   }
 
   void processNextButton() {
-    if ((GameData.questionIndex + 1) == AppConfig.questionsPerGame) {
+    if ((SessionData.questionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const ConfettiPage(),
@@ -65,8 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       setState(
         () {
-          GameData.waitingForAnAnswer = true;
-          GameData.questionIndex++;
+          SessionData.waitingForAnAnswer = true;
+          SessionData.questionIndex++;
         },
       );
     }
@@ -74,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    question = QuestionsUtil.getQuestion(GameData.questionIndex);
+    question = QuestionsUtil.getQuestion(SessionData.questionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -114,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Text(
           question.question,
           style: const TextStyle(
-              fontSize: AppConfig.fontSize, color: Colors.white),
+              fontSize: GameConfig.fontSize, color: Colors.white),
         ),
       ),
     );
@@ -122,11 +123,11 @@ class _MyHomePageState extends State<MyHomePage> {
     widgetList.add(Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        GameData.waitingForAnAnswer
+        SessionData.waitingForAnAnswer
             ? const Text(
                 "Select an answer:",
                 style: TextStyle(
-                  fontSize: AppConfig.fontSize,
+                  fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 255),
                   backgroundColor: Colors.white,
@@ -138,8 +139,6 @@ class _MyHomePageState extends State<MyHomePage> {
                       const MaterialStatePropertyAll<Color>(Colors.white),
                   elevation: MaterialStateProperty.resolveWith<double>(
                     (Set<MaterialState> states) {
-                      // if the button is pressed the elevation is 10.0, if not
-                      // it is 5.0
                       if (states.contains(MaterialState.pressed)) {
                         return 10.0;
                       } else {
@@ -151,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: const Text(
                   "Next question >",
                   style: TextStyle(
-                      fontSize: AppConfig.fontSize,
+                      fontSize: GameConfig.fontSize,
                       fontWeight: FontWeight.bold,
                       color: Color.fromARGB(255, 0, 0, 255)),
                 ),
@@ -159,12 +158,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   processNextButton();
                 },
               ),
-        Spacer(),
+        const Spacer(),
         Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
         Text(
-          GameData.correctAnswers.toString(),
+          SessionData.correctAnswers.toString(),
           style: const TextStyle(
-              fontSize: AppConfig.fontSize,
+              fontSize: GameConfig.fontSize,
               backgroundColor: Colors.green,
               color: Colors.white),
         ),
@@ -172,9 +171,9 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 8,
         ),
         Text(
-          GameData.wrongAnswers.toString(),
+          SessionData.wrongAnswers.toString(),
           style: const TextStyle(
-              fontSize: AppConfig.fontSize,
+              fontSize: GameConfig.fontSize,
               backgroundColor: Colors.red,
               color: Colors.white),
         ),
@@ -182,26 +181,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     ));
     answerButtonList.clear();
-    bool correctAnswer = question.answer == GameData.selectedAnswer;
-    for (int i = 0; i < AppConfig.answersCount; i++) {
+    bool correctAnswer = question.answer == SessionData.selectedAnswer;
+    for (int i = 0; i < GameConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
-      if (GameData.selectedAnswer == i + 1) {
+      if (SessionData.selectedAnswer == i + 1) {
         if (correctAnswer) {
           buttonColor = Colors.green;
-          GameData.correctAnswers++;
+          SessionData.correctAnswers++;
         } else {
           buttonColor = Colors.red;
-          GameData.wrongAnswers++;
+          SessionData.wrongAnswers++;
         }
       }
       answerButtonList.add(
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: GameData.waitingForAnAnswer
+            onPressed: SessionData.waitingForAnAnswer
                 ? () {
-                    GameData.selectedAnswer = i + 1;
+                    SessionData.selectedAnswer = i + 1;
                     processAnswer();
                   }
                 : null,
@@ -210,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Text(
               question.answers[i],
               style: const TextStyle(
-                  color: Colors.black, fontSize: AppConfig.fontSize),
+                  color: Colors.black, fontSize: GameConfig.fontSize),
             ),
           ),
         ),
@@ -225,7 +224,7 @@ class _MyHomePageState extends State<MyHomePage> {
       thickness: 2.0,
     ));
     // add answer text
-    if (!GameData.waitingForAnAnswer) {
+    if (!SessionData.waitingForAnAnswer) {
       widgetList.add(
         Container(
             margin: const EdgeInsets.all(10.0),

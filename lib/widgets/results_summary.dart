@@ -1,8 +1,8 @@
 import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
 
-import '../config/app_config.dart';
-import '../config/game_data.dart';
+import '../config/game_config.dart';
+import '../config/session_data.dart';
 
 class ResultsSummary {
   Container container = Container(
@@ -10,9 +10,9 @@ class ResultsSummary {
     padding: const EdgeInsets.all(30.0),
     color: Colors.pink,
     child: BlinkText(
-      'You have answered correctly\n$GameData.correctAnswers out of ${AppConfig.questionsPerGame} questions ! ',
+      'You have answered correctly\n$SessionData.correctAnswers out of ${GameConfig.questionsPerGame} questions ! ',
       textAlign: TextAlign.center,
-      style: const TextStyle(fontSize: AppConfig.fontSize),
+      style: const TextStyle(fontSize: GameConfig.fontSize),
       beginColor: Colors.yellowAccent,
       endColor: Colors.white,
       times: 200,

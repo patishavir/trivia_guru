@@ -4,8 +4,9 @@ import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 
-import '../config/app_config.dart';
-import '../config/game_data.dart';
+import '../config/game_config.dart';
+import '../config/session_data.dart';
+import '../common/logging_utils.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -52,9 +53,9 @@ class ConfettiPageState extends State<ConfettiPage> {
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
               child: BlinkText(
-                'You have answered correctly\n${GameData.correctAnswers} out of ${AppConfig.questionsPerGame} questions ! ',
+                'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: AppConfig.fontSize),
+                style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
                 endColor: Colors.white,
                 times: 200,
@@ -97,9 +98,9 @@ class ConfettiPageState extends State<ConfettiPage> {
 
   Future<void> stopController() {
     return Future.delayed(
-        const Duration(seconds: AppConfig.confettiAnimationDuration), () {
+        const Duration(seconds: GameConfig.confettiAnimationDuration), () {
       confettiController.stop();
-      print('controller has stopped');
+      LoggingUtils.writeLog('controller has stopped');
       Navigator.of(context).pop();
     });
   }
