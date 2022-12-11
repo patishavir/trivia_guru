@@ -13,6 +13,7 @@ class MultipleChoiceApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SessionData.initSessionData();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Trivia Guru',
@@ -21,6 +22,7 @@ class MultipleChoiceApp extends StatelessWidget {
         fontFamily: 'NovaSlim',
         textTheme: const TextTheme(
           bodyText1: TextStyle(fontSize: GameConfig.fontSize),
+          button: TextStyle(fontSize: GameConfig.fontSize),
         ),
       ),
       home: const MyHomePage(title: 'Trivia Guru'),
@@ -39,19 +41,22 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late Question question;
+  bool isCorrectAnswer = false;
 
-  void processAnswer() {
+  void processAnswer(int i) {
     setState(
       () {
+        SessionData.selectedAnswer = i + 1;
         SessionData.waitingForAnAnswer = false;
-        LoggingUtils.writeLog('selected answer: $SessionData.selectedAnswer');
-        if (question.answer == SessionData.selectedAnswer) {
-          LoggingUtils.writeLog(
-              '$SessionData.selectedAnswer is the correct answer');
+        isCorrectAnswer = question.answer == SessionData.selectedAnswer;
+        if (isCorrectAnswer) {
+          SessionData.correctAnswers++;
         } else {
-          LoggingUtils.writeLog(
-              '$SessionData.selectedAnswer is a wrong answer');
+          SessionData.wrongAnswers++;
         }
+        LoggingUtils.writeLog(
+            'selected answer $SessionData.selectedAnswer is ');
+        LoggingUtils.writeLog(isCorrectAnswer ? 'correct' : 'wrong');
       },
     );
   }
@@ -68,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         () {
           SessionData.waitingForAnAnswer = true;
           SessionData.questionIndex++;
+          SessionData.selectedAnswer = 0;
         },
       );
     }
@@ -104,6 +110,18 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
 
+    if (question.questionImageUrl != null) {
+      widgetList.add(
+        SizedBox(
+          width: double.infinity,
+          height: 250.0,
+          child: Image.network(
+            "https://images.unsplash.com/photo-1547721064-da6cfb341d50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    }
     widgetList.add(
       Container(
         margin: const EdgeInsets.all(4.0),
@@ -181,18 +199,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     ));
     answerButtonList.clear();
-    bool correctAnswer = question.answer == SessionData.selectedAnswer;
+
     for (int i = 0; i < GameConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
-      if (SessionData.selectedAnswer == i + 1) {
-        if (correctAnswer) {
-          buttonColor = Colors.green;
-          SessionData.correctAnswers++;
-        } else {
-          buttonColor = Colors.red;
-          SessionData.wrongAnswers++;
-        }
+      if (i == SessionData.selectedAnswer - 1) {
+        buttonColor = isCorrectAnswer ? Colors.green : Colors.red;
       }
       answerButtonList.add(
         Container(
@@ -200,8 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: TextButton(
             onPressed: SessionData.waitingForAnAnswer
                 ? () {
-                    SessionData.selectedAnswer = i + 1;
-                    processAnswer();
+                    processAnswer(i);
                   }
                 : null,
             style: TextButton.styleFrom(

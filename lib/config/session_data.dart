@@ -5,7 +5,7 @@ class SessionData {
   static int correctAnswers = 0;
   static int wrongAnswers = 0;
 
-  void initSessionData() {
+  static void initSessionData() {
     waitingForAnAnswer = true;
     questionIndex = 0;
     selectedAnswer = 0;

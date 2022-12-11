@@ -1,5 +1,6 @@
 class Question {
   late String question;
+  late String? questionImageUrl;
   int answer = 0;
   late String answerText;
   late List<String> answers;
@@ -12,6 +13,7 @@ class Question {
 
   Question(
       this.question,
+      this.questionImageUrl,
       this.answer,
       this.answerText,
       this.answers,
@@ -24,6 +26,7 @@ class Question {
 
   Map toJson() => {
         'question': question,
+        'questionImageUrl': questionImageUrl,
         'answer': answer.toString(),
         'answerText': answerText,
         'answers': answers,
