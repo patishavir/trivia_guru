@@ -21,8 +21,8 @@ class MultipleChoiceApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'NovaSlim',
         textTheme: const TextTheme(
-          bodyText1: TextStyle(fontSize: GameConfig.fontSize),
-          button: TextStyle(fontSize: GameConfig.fontSize),
+          bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
+          labelLarge: TextStyle(fontSize: GameConfig.fontSize),
         ),
       ),
       home: const MyHomePage(title: 'Trivia Guru'),
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       () {
         SessionData.selectedAnswer = i + 1;
         SessionData.waitingForAnAnswer = false;
-        isCorrectAnswer = question.answer == SessionData.selectedAnswer;
+        isCorrectAnswer = question.correctAnswerIndex == SessionData.selectedAnswer;
         if (isCorrectAnswer) {
           SessionData.correctAnswers++;
         } else {
@@ -81,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    question = QuestionsUtil.getQuestion(SessionData.questionIndex);
+    question = QuestionsUtils.getQuestion(SessionData.questionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -94,11 +94,14 @@ class _MyHomePageState extends State<MyHomePage> {
         body: Center(
           child: Align(
             alignment: Alignment.topLeft,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: getWidgetList(),
+            child: SingleChildScrollView(
+
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: getWidgetList(),
+              ),
             ),
           ),
         ),
@@ -110,13 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
 
-    if (question.questionImageUrl != null) {
+    if (question.imageUrl != null) {
       widgetList.add(
         SizedBox(
           width: double.infinity,
           height: 250.0,
           child: Image.network(
-            "https://images.unsplash.com/photo-1547721064-da6cfb341d50?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+            question.imageUrl!,
             fit: BoxFit.contain,
           ),
         ),
@@ -177,7 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
         const Spacer(),
-        Text('Score: ', style: Theme.of(context).textTheme.bodyText1),
+        Text('Score: ', style: Theme.of(context).textTheme.bodyLarge),
         Text(
           SessionData.correctAnswers.toString(),
           style: const TextStyle(
@@ -240,7 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
         Container(
             margin: const EdgeInsets.all(10.0),
             child: Text(question.answerText,
-                style: Theme.of(context).textTheme.bodyText1)),
+                style: Theme.of(context).textTheme.bodyLarge)),
       );
     }
 

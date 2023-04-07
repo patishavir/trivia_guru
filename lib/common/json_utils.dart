@@ -3,10 +3,10 @@ import 'dart:io';
 
 import '../common/logging_utils.dart';
 import '../objects/question.dart';
-import 'questions_utils.dart';
+import '../utils/questions_utils.dart';
 
 main() async {
-  Question q1 = QuestionsUtil.getQuestion(1);
+  Question q1 = QuestionsUtils.getQuestion(1);
   LoggingUtils.writeLog(q1.toString());
   LoggingUtils.writeLog(q1.toJson().toString());
   const JsonEncoder encoder = JsonEncoder.withIndent('  ');

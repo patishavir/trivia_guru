@@ -1,10 +1,10 @@
 class Question {
   late String question;
-  late String? questionImageUrl;
-  int answer = 0;
+  late String? imageUrl;
+  int correctAnswerIndex = 0;
   late String answerText;
   late List<String> answers;
-  late int difficulty;
+  late int difficultyLevel;
   late List<String> subjects;
   late String enteredBy;
   late DateTime entryDAte;
@@ -13,11 +13,11 @@ class Question {
 
   Question(
       this.question,
-      this.questionImageUrl,
-      this.answer,
+      this.imageUrl,
+      this.correctAnswerIndex,
       this.answerText,
       this.answers,
-      this.difficulty,
+      this.difficultyLevel,
       this.subjects,
       this.enteredBy,
       this.entryDAte,
@@ -26,11 +26,11 @@ class Question {
 
   Map toJson() => {
         'question': question,
-        'questionImageUrl': questionImageUrl,
-        'answer': answer.toString(),
+        'questionImageUrl': imageUrl,
+        'correctAnswer': correctAnswerIndex.toString(),
         'answerText': answerText,
         'answers': answers,
-        'difficulty': difficulty.toString(),
+        'difficulty': difficultyLevel.toString(),
         'subjects': subjects,
         'enteredBy': enteredBy,
         'entryDAte': entryDAte.toString(),
