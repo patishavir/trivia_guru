@@ -1,0 +1,36 @@
+[
+  {
+    "question":"איזו קבוצה זכתה הכי הרבה פעמים בגביע המדינה בכדורגל",
+    "qimage":"none",
+    "correctanswerindex":3,
+    "answertext":"מכבי תל אביב זכתה בגביע המדינה בכדור רגל 18 פעמים. יותר מכל קבוצה אחרת",
+    "answer1":"הפועל תל אביב",
+    "answer2":"מכבי חיפה",
+    "answer3":"מכבי תל אביב",
+    "answer4":"ביתר ירושלים",
+    "difficultylevel":5,
+    "subject":"israeli-soccer",
+    "language":"HE",
+    "timestamp":"2023-11-20 20:44:001+0200",
+    "category":"sport",
+    "qid":5858509,
+    "aimage":"null"
+  },
+  {
+    "question":"מתי נוסדה בישראל הליגה לכדורגל",
+    "qimage":"none",
+    "correctanswerindex":2,
+    "answertext":"הליגה לכדורגל נוסדה בתקופת המנדט הבריטי בשנת 1931",
+    "answer1":"בסוף שנות העשרים של המאה העשרים",
+    "answer2":"בתחילת שנות השלושים",
+    "answer3":"בסוף שנות השלושים",
+    "answer4":"בתחילת שנות הארבעים",
+    "difficultylevel":5,
+    "subject":"israeli-soccer",
+    "language":"HE",
+    "timestamp":"2023-10-28 20:55:038+0300",
+    "category":"sport",
+    "qid":15755966,
+    "aimage":"null"
+  }
+  ]

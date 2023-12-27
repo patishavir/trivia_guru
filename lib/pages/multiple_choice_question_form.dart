@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
       () {
         SessionData.selectedAnswer = i + 1;
         SessionData.waitingForAnAnswer = false;
-        isCorrectAnswer = question.correctAnswerIndex == SessionData.selectedAnswer;
+        isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
         if (isCorrectAnswer) {
           SessionData.correctAnswers++;
         } else {
@@ -113,13 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
 
-    if (question.imageUrl != null) {
+    if (question.qimage != null) {
       widgetList.add(
         SizedBox(
           width: double.infinity,
           height: 250.0,
           child: Image.network(
-            question.imageUrl!,
+            question.qimage!,
             fit: BoxFit.contain,
           ),
         ),
@@ -202,7 +202,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     ));
     answerButtonList.clear();
-
+    List<String > answers = [question.answer1, question.answer2, question.answer3, question.answer4];
     for (int i = 0; i < GameConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
@@ -221,7 +221,7 @@ class _MyHomePageState extends State<MyHomePage> {
             style: TextButton.styleFrom(
                 backgroundColor: buttonColor, shadowColor: buttonColor),
             child: Text(
-              question.answers[i],
+              answers[i],
               style: const TextStyle(
                   color: Colors.black, fontSize: GameConfig.fontSize),
             ),
@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
       widgetList.add(
         Container(
             margin: const EdgeInsets.all(10.0),
-            child: Text(question.answerText,
+            child: Text(question.answertext,
                 style: Theme.of(context).textTheme.bodyLarge)),
       );
     }

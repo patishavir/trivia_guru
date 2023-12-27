@@ -17,7 +17,7 @@ class LoggingUtils {
     }
   }
 
-  static void writeLog(String message) {
+  static void writeLog(String? message) {
     if (GameConfig.writeLog) {
       if (_log == null) {
         _initLogging();
