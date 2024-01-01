@@ -7,7 +7,7 @@ class LoggingUtils {
 
   static _initLogging() {
     if (GameConfig.writeLog) {
-      _log = Logger('AppLogger');
+      _log = Logger('Flutter logger');
       Logger.root.level = Level.FINE; // defaults to Level.INFO
       Logger.root.onRecord.listen((record) {
         if (kDebugMode) {

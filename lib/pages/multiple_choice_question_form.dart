@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -10,22 +11,35 @@ import '../utils/questions_utils.dart';
 class MultipleChoiceApp extends StatelessWidget {
   const MultipleChoiceApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     SessionData.initSessionData();
     return MaterialApp(
+      localizationsDelegates: const [
+        GlobalCupertinoLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      locale: const Locale('he'),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('es'),
+      ],
+
       debugShowCheckedModeBanner: false,
       title: 'Trivia Guru',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: 'NovaSlim',
+        fontFamily: GameConfig.fontFamily,
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
           labelLarge: TextStyle(fontSize: GameConfig.fontSize),
         ),
       ),
-      home: const MyHomePage(title: 'Trivia Guru'),
+      home: const Directionality(
+        textDirection: GameConfig.textDirection,
+        child: MyHomePage(title: 'מלך הטריוויה'),
+      ),
     );
   }
 }
@@ -48,7 +62,8 @@ class _MyHomePageState extends State<MyHomePage> {
       () {
         SessionData.selectedAnswer = i + 1;
         SessionData.waitingForAnAnswer = false;
-        isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
+        isCorrectAnswer =
+            question.correctanswerindex == SessionData.selectedAnswer;
         if (isCorrectAnswer) {
           SessionData.correctAnswers++;
         } else {
@@ -90,12 +105,12 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          centerTitle: true,
         ),
         body: Center(
           child: Align(
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,14 +128,14 @@ class _MyHomePageState extends State<MyHomePage> {
     List<Widget> widgetList = [];
     List<Widget> answerButtonList = [];
 
-    if (question.qimage != null) {
+    if (question.qimage != null && question.qimage!.isNotEmpty) {
       widgetList.add(
-        SizedBox(
-          width: double.infinity,
-          height: 250.0,
-          child: Image.network(
-            question.qimage!,
-            fit: BoxFit.contain,
+        Center(
+          child: SizedBox(
+            width: 200.0,
+            height: 200.0,
+            child: Image.asset('assets/images/${question.qimage}',
+                fit: BoxFit.fill),
           ),
         ),
       );
@@ -202,7 +217,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     ));
     answerButtonList.clear();
-    List<String > answers = [question.answer1, question.answer2, question.answer3, question.answer4];
+    List<String> answers = [
+      question.answer1,
+      question.answer2,
+      question.answer3,
+      question.answer4
+    ];
     for (int i = 0; i < GameConfig.answersCount; i++) {
       LoggingUtils.writeLog('iteration number: $i');
       Color? buttonColor = Colors.grey[400];
