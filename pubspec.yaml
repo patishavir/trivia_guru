@@ -16,7 +16,7 @@ dependencies:
   intl: any
 
   cupertino_icons: ^1.0.6
-  easy_localization: ^3.0.0
+  easy_localization: ^3.0.3
   logging: ^1.1.0
   build_runner: ^2.3.2
   build_web_compilers: ^4.0.7
@@ -37,7 +37,7 @@ flutter:
   assets:
     - assets/questions/
     - assets/images/
-    - assets/i18n/
+    - assets/l10n/
   fonts:
     - family: NovaSlim
       fonts:

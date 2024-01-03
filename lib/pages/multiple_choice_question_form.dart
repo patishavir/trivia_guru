@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -7,27 +7,19 @@ import '../config/session_data.dart';
 import '../objects/question.dart';
 import '../pages/confetti_page.dart';
 import '../utils/questions_utils.dart';
+import '../l10n/l10n.dart';
+import '../l10n/locale_keys.g.dart';
 
 class MultipleChoiceApp extends StatelessWidget {
   const MultipleChoiceApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    LoggingUtils.writeLog("locale: ${context.locale}");
     SessionData.initSessionData();
     return MaterialApp(
-      localizationsDelegates: const [
-        GlobalCupertinoLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      locale: const Locale('he'),
-      supportedLocales: const [
-        Locale('en'),
-        Locale('es'),
-      ],
-
       debugShowCheckedModeBanner: false,
-      title: 'Trivia Guru',
+      title: LocaleKeys.app_title.tr(),
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: GameConfig.fontFamily,
@@ -36,10 +28,16 @@ class MultipleChoiceApp extends StatelessWidget {
           labelLarge: TextStyle(fontSize: GameConfig.fontSize),
         ),
       ),
-      home: const Directionality(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      /*
+      home:  Directionality(
         textDirection: GameConfig.textDirection,
-        child: MyHomePage(title: 'מלך הטריוויה'),
-      ),
+        child: MyHomePage(title: LocaleKeys.app_title.tr()),
+        )
+        */
+      home: MyHomePage(title: LocaleKeys.app_title.tr()),
     );
   }
 }
@@ -96,6 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    LoggingUtils.writeLog("app_title: ${LocaleKeys.app_title.tr()}");
+    LoggingUtils.writeLog("Locale: ${context.locale}");
     question = QuestionsUtils.getQuestion(SessionData.questionIndex);
     return Container(
       decoration: BoxDecoration(
@@ -160,9 +160,9 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SessionData.waitingForAnAnswer
-            ? const Text(
-                "Select an answer:",
-                style: TextStyle(
+            ? Text(
+                LocaleKeys.select_an_answer.tr(),
+                style: const TextStyle(
                   fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 255),
