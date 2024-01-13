@@ -11,21 +11,20 @@ import 'package:provider/provider.dart';
 
 class MultipleChoiceApp extends StatelessWidget {
   const MultipleChoiceApp({super.key});
-
+  static const String heTitle = "אלוף הטריוויה";
+  static const String enTitle = "Trivia Guru";
   @override
   Widget build(BuildContext context) {
     SessionData.initSessionData();
-    localeModel.set(Locale('he'),
     return ChangeNotifierProvider(
       create: (context) => LocaleModel(),
       child: Consumer<LocaleModel>(
         builder: (context, localeModel, child) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: "Trivia Guru",
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-
           locale: localeModel.locale,
+          title: localeModel.locale == LocaleModel.hebrewLocale ? heTitle : enTitle,
           theme: ThemeData(
             primarySwatch: Colors.blue,
             fontFamily: GameConfig.fontFamily,
@@ -34,14 +33,8 @@ class MultipleChoiceApp extends StatelessWidget {
               labelLarge: TextStyle(fontSize: GameConfig.fontSize),
             ),
           ),
-
-          /*
-        home:  Directionality(
-          textDirection: GameConfig.textDirection,
-          child: MyHomePage(title: LocaleKeys.app_title.tr()),
-          )
-          */
-          home: const MyHomePage(title: "Trivia Guru"),
+          // home:  MyHomePage(title: AppLocalizations.of(context)!.app_title),
+          home:  const MyHomePage(),
         ),
       ),
     );
@@ -50,9 +43,7 @@ class MultipleChoiceApp extends StatelessWidget {
 
 // title: AppLocalizations.of(context)!.helloWorld
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -83,7 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void processNextButton() {
     LoggingUtils.writeLog(
-        "hello world: ${AppLocalizations.of(context)!.select_an_answer} ${AppLocalizations.of(context)?.localeName}");
+        "Select an answer: ${AppLocalizations.of(context)!.select_an_answer} ${AppLocalizations.of(context)?.localeName}");
     if ((SessionData.questionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -103,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    LoggingUtils.writeLog("app_title: Trivia Guru");
+    LoggingUtils.writeLog(
+        "app_title: ${AppLocalizations.of(context)!.app_title}");
     question = QuestionsUtils.getQuestion(SessionData.questionIndex);
     return Container(
       decoration: BoxDecoration(
@@ -112,7 +104,8 @@ class _MyHomePageState extends State<MyHomePage> {
       constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+         // title: Text(widget.title),
+          title: Text( AppLocalizations.of(context)!.app_title,),
           centerTitle: true,
         ),
         body: Center(
@@ -203,7 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
         const Spacer(),
-        Text('Score: ', style: Theme.of(context).textTheme.bodyLarge),
+        Text('${AppLocalizations.of(context)!.score}: ', style: Theme.of(context).textTheme.bodyLarge),
         Text(
           SessionData.correctAnswers.toString(),
           style: const TextStyle(
