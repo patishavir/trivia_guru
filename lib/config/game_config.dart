@@ -9,4 +9,4 @@ class GameConfig {
   static const int questionsPerGame = 4;
   static const int confettiAnimationDuration = 3;
   static const TextDirection textDirection = TextDirection.rtl;
-}
+  static const Locale defaultLocale = Locale("he");

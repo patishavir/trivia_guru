@@ -5,7 +5,9 @@ import '../config/session_data.dart';
 import '../objects/question.dart';
 import '../pages/confetti_page.dart';
 import '../utils/questions_utils.dart';
+import '../model/locale.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MultipleChoiceApp extends StatelessWidget {
   const MultipleChoiceApp({super.key});
@@ -13,30 +15,39 @@ class MultipleChoiceApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SessionData.initSessionData();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: "Trivia Guru",
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: GameConfig.fontFamily,
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
-          labelLarge: TextStyle(fontSize: GameConfig.fontSize),
+    localeModel.set(Locale('he'),
+    return ChangeNotifierProvider(
+      create: (context) => LocaleModel(),
+      child: Consumer<LocaleModel>(
+        builder: (context, localeModel, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: "Trivia Guru",
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+
+          locale: localeModel.locale,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: GameConfig.fontFamily,
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
+              labelLarge: TextStyle(fontSize: GameConfig.fontSize),
+            ),
+          ),
+
+          /*
+        home:  Directionality(
+          textDirection: GameConfig.textDirection,
+          child: MyHomePage(title: LocaleKeys.app_title.tr()),
+          )
+          */
+          home: const MyHomePage(title: "Trivia Guru"),
         ),
       ),
-
-      /*
-      home:  Directionality(
-        textDirection: GameConfig.textDirection,
-        child: MyHomePage(title: LocaleKeys.app_title.tr()),
-        )
-        */
-      home:  const MyHomePage(title: "Trivia Guru"),
     );
   }
 }
+
 // title: AppLocalizations.of(context)!.helloWorld
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -71,7 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void processNextButton() {
-    LoggingUtils.writeLog("hello world: ${AppLocalizations.of(context)!.helloWorld} ${AppLocalizations.of(context)?.localeName}");
+    LoggingUtils.writeLog(
+        "hello world: ${AppLocalizations.of(context)!.select_an_answer} ${AppLocalizations.of(context)?.localeName}");
     if ((SessionData.questionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -156,9 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SessionData.waitingForAnAnswer
-            ? const Text(
-               "Select an answer",
-                style: TextStyle(
+            ? Text(
+                AppLocalizations.of(context)!.select_an_answer,
+                style: const TextStyle(
                   fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Color.fromARGB(255, 0, 0, 255),
