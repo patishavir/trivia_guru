@@ -73,8 +73,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void processNextButton() {
-    LoggingUtils.writeLog(
-        "Select an answer: ${AppLocalizations.of(context)!.select_an_answer} ${AppLocalizations.of(context)?.localeName}");
     if ((SessionData.questionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -94,8 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    LoggingUtils.writeLog(
-        "app_title: ${AppLocalizations.of(context)!.app_title}");
     question = QuestionsUtils.getQuestion(SessionData.questionIndex);
     return Container(
       decoration: BoxDecoration(
