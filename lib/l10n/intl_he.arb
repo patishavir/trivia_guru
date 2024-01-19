@@ -1,5 +1,7 @@
 {
-   "select_an_answer": "בחר תשובה",
+  "select_an_answer": "בחר תשובה",
   "app_title": "אלוף הטריוויה",
-  "score": "תוצאה"
+  "score": "תוצאה",
+  "summary_line": "ענית נכון על {correctAnswers} מתוך {questionsPerGame} שאלות !",
+  "next_question": "השאלה הבאה"
 }

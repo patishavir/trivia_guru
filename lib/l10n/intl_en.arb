@@ -1,5 +1,7 @@
 {
   "select_an_answer": "Select an answer",
   "app_title": "Trivia King",
-  "score": "Score"
+  "score": "Score",
+  "summary_line": "You have answered correctly\n{correctAnswers} out of {questionsPerGame} questions !",
+  "next_question": "Next question"
 }

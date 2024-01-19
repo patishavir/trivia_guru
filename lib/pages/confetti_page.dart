@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../common/logging_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -53,7 +54,8 @@ class ConfettiPageState extends State<ConfettiPage> {
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
               child: BlinkText(
-                'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
+               // 'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
+                AppLocalizations.of(context)!.summary_line(SessionData.correctAnswers, GameConfig.questionsPerGame),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
