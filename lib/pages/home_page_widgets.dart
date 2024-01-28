@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/score_provider.dart';
+import '../providers/status_provider.dart';
 import 'home_page.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -33,11 +36,12 @@ Widget getQuestion(Question question) {
 }
 
 Widget getSelectAnAnswerRow(
-    Question question, BuildContext context, MyHomePageState myHomePageState) {
+    Question question, BuildContext context, MyHomePage myHomePageState) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      SessionData.waitingForAnAnswer
+      Provider.of<StatusProvider>(context, listen: false)
+      .isWaitingForAnAnswer
           ? Text(
               AppLocalizations.of(context)!.select_an_answer,
               style: const TextStyle(
@@ -54,9 +58,9 @@ Widget getSelectAnAnswerRow(
                 elevation: MaterialStateProperty.resolveWith<double>(
                   (Set<MaterialState> states) {
                     if (states.contains(MaterialState.pressed)) {
-                      return 10.0;
+                      return 100.0;
                     } else {
-                      return 10.0;
+                      return 100.0;
                     }
                   },
                 ),
@@ -76,7 +80,7 @@ Widget getSelectAnAnswerRow(
       Text('${AppLocalizations.of(context)!.score}: ',
           style: Theme.of(context).textTheme.bodyLarge),
       Text(
-        SessionData.correctAnswers.toString(),
+        Provider.of<ScoreProvider>(context, listen: false).correctAnswers.toString(),
         style: const TextStyle(
             fontSize: GameConfig.fontSize,
             backgroundColor: Colors.green,
@@ -86,7 +90,7 @@ Widget getSelectAnAnswerRow(
         width: 8,
       ),
       Text(
-        SessionData.wrongAnswers.toString(),
+        Provider.of<ScoreProvider>(context, listen: false).wrongAnswers.toString(),
         style: const TextStyle(
             fontSize: GameConfig.fontSize,
             backgroundColor: Colors.red,
@@ -98,7 +102,7 @@ Widget getSelectAnAnswerRow(
 }
 
 List<Widget> getAnswers(
-    Question question, MyHomePageState myHomePageState, bool isCorrectAnswer) {
+    Question question, MyHomePage myHomePage, bool isCorrectAnswer, BuildContext context) {
   List<Widget> answerButtonList = [];
   answerButtonList.clear();
   List<String> answers = [
@@ -117,9 +121,10 @@ List<Widget> getAnswers(
       Container(
         margin: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed: SessionData.waitingForAnAnswer
+          onPressed:  Provider.of<StatusProvider>(context, listen: false)
+              .isWaitingForAnAnswer
               ? () {
-                  myHomePageState.processAnswer(i);
+                  myHomePage.processAnswer(i);
                 }
               : null,
           style: TextButton.styleFrom(
@@ -137,9 +142,19 @@ List<Widget> getAnswers(
 }
 
 Widget getAnswerText (Question question, BuildContext context) {
-  return  Container(
-      margin: const EdgeInsets.all(10.0),
-      child: Text(question.answertext,
-          style: Theme.of(context).textTheme.bodyLarge),
+  return Container(
+    margin: const EdgeInsets.all(10.0),
+    child: Text(question.answertext,
+        style: Theme
+            .of(context)
+            .textTheme
+            .bodyLarge),
+  );
+}
+Widget getDivider () {
+  return const Divider(
+    color: Colors.red,
+    height: 5.0,
+    thickness: 2.0,
   );
 }
