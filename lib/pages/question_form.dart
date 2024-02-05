@@ -39,9 +39,13 @@ class QuestionFormApp extends StatelessWidget {
             ),
           ),
           // home:  MyHomePage(title: AppLocalizations.of(context)!.app_title),
-          home: MyHomePage(),
+          home:   ChangeNotifierProvider<StatusProvider>(
+              create: (_) => StatusProvider(),
+              child: MyHomePage(),
+          ),
+          )
+
         ),
-      ),
-    );
+      );
   }
 }

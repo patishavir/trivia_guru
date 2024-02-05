@@ -6,7 +6,7 @@ class StatusProvider extends ChangeNotifier {
 
   bool get isWaitingForAnAnswer => _isWaitingForAnAnswer;
 
-  void setIsWaitingForResponse(bool isWaitingForAnAnswer) {
+  void setIsWaitingForAnAnswer(bool isWaitingForAnAnswer) {
     _isWaitingForAnAnswer = isWaitingForAnAnswer;
     LoggingUtils.writeLog("isWaitingForAnAnswer is $_isWaitingForAnAnswer !");
     notifyListeners();

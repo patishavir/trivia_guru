@@ -78,6 +78,8 @@ class MyHomePage extends StatelessWidget {
   }
 
   void processAnswer(int i) {
+    Provider.of<StatusProvider>(context, listen: false)
+        .setIsWaitingForAnAnswer(false);
     SessionData.selectedAnswer = i + 1;
     isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
     if (isCorrectAnswer) {
@@ -90,7 +92,7 @@ class MyHomePage extends StatelessWidget {
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
     Provider.of<StatusProvider>(context, listen: false)
-        .setIsWaitingForResponse(false);
+        .setIsWaitingForAnAnswer(false);
     SessionData.questionIndex++;
   }
 
