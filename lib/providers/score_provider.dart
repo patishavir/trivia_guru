@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../common/logging_utils.dart';
+import '../../../trivia_guru_projects/trivia_guru/lib/common/logging_utils.dart';
 
 class ScoreProvider extends ChangeNotifier {
   int _correctAnswers = 0;
