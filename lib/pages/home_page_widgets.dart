@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/score_provider.dart';
+import '../objects/score.dart';
 import '../providers/status_provider.dart';
 import 'home_page.dart';
 import '../common/logging_utils.dart';
@@ -19,7 +19,7 @@ Widget getQuestionImage(Question question) {
   );
 }
 
-Widget getQuestion(Question question) {
+Widget getQuestionWidget(Question question) {
   return Container(
     margin: const EdgeInsets.all(4.0),
     padding: const EdgeInsets.all(4.0),
@@ -52,18 +52,9 @@ Widget getSelectAnAnswerRow(
               ),
             )
           : ElevatedButton(
-              style: ButtonStyle(
+              style: const ButtonStyle(
                 backgroundColor:
-                    const MaterialStatePropertyAll<Color>(Colors.white),
-                elevation: MaterialStateProperty.resolveWith<double>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return 100.0;
-                    } else {
-                      return 100.0;
-                    }
-                  },
-                ),
+                    MaterialStatePropertyAll<Color>(Colors.white),
               ),
               child: Text(
                 '${AppLocalizations.of(context)!.next_question} >',
@@ -73,14 +64,14 @@ Widget getSelectAnAnswerRow(
                     color: Color.fromARGB(255, 0, 0, 255)),
               ),
               onPressed: () {
-                myHomePageState.processNextButton();
+                myHomePageState.processNextQuestionButton();
               },
             ),
       const Spacer(),
       Text('${AppLocalizations.of(context)!.score}: ',
           style: Theme.of(context).textTheme.bodyLarge),
       Text(
-        Provider.of<ScoreProvider>(context, listen: false).correctAnswers.toString(),
+       Score.correctAnswers.toString(),
         style: const TextStyle(
             fontSize: GameConfig.fontSize,
             backgroundColor: Colors.green,
@@ -90,7 +81,7 @@ Widget getSelectAnAnswerRow(
         width: 8,
       ),
       Text(
-        Provider.of<ScoreProvider>(context, listen: false).wrongAnswers.toString(),
+        Score.wrongAnswers.toString(),
         style: const TextStyle(
             fontSize: GameConfig.fontSize,
             backgroundColor: Colors.red,
@@ -101,7 +92,7 @@ Widget getSelectAnAnswerRow(
   );
 }
 
-List<Widget> getAnswers(
+List<Widget> getAnswerButtons(
     Question question, MyHomePage myHomePage, bool isCorrectAnswer, BuildContext context) {
   List<Widget> answerButtonList = [];
   answerButtonList.clear();
@@ -124,7 +115,9 @@ List<Widget> getAnswers(
           onPressed:  Provider.of<StatusProvider>(context, listen: false)
               .isWaitingForAnAnswer
               ? () {
-                  myHomePage.processAnswer(i);
+            onPressed:  Provider.of<StatusProvider>(context, listen: false)
+                .setIsWaitingForAnAnswer(false);
+                  myHomePage.processAnswerButtonClick(i);
                 }
               : null,
           style: TextButton.styleFrom(

@@ -3,11 +3,8 @@ import 'dart:math';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:trivia_guru/providers/score_provider.dart';
-
+import '../objects/score.dart';
 import '../config/game_config.dart';
-import '../config/session_data.dart';
 import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -57,7 +54,7 @@ class ConfettiPageState extends State<ConfettiPage> {
               color: Colors.pink,
               child: BlinkText(
                // 'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
-                AppLocalizations.of(context)!.summary_line(Provider.of<ScoreProvider>(context, listen: false).correctAnswers, GameConfig.questionsPerGame),
+                AppLocalizations.of(context)!.summary_line(Score.correctAnswers, GameConfig.questionsPerGame),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
