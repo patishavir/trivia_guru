@@ -1,4 +1,6 @@
 import 'dart:core';
+import "dart:convert";
+import '../common/logging_utils.dart';
 
 class Question {
   String question;
@@ -49,35 +51,38 @@ class Question {
         'qid': qid
       };
 
-  factory Question.fromJson(Map<String, dynamic> json) {
-    print(json['question']);
-    print(json['qimage']);
-    print(json['aimage']);
-    print(json['correctanswerindex']);
-    print(json['answertext']);
-    print(json['answer1']);
-    print(json['answer2']);
-    print(json['answer3']);
-    print(json['answer4']);
-    print(json['difficultylevel']);
-    print(json['subject']);
-    print(json['category']);
-    print(json['timestamp']);
-    print(json['qid']);
+  factory Question.fromJson(Map<String, dynamic> jsonMap) {
+    LoggingUtils.writeLog(json.encode(jsonMap));
     return Question(
-        question: json['question'] as String,
-        qimage: json['qimage'] as String,
-        aimage: json['aimage'] as String,
-        correctanswerindex: json['correctanswerindex'] as int,
-        answertext: json['answertext'] as String,
-        answer1: json['answer1'] as String,
-        answer2: json['answer2'] as String,
-        answer3: json['answer3'] as String,
-        answer4: json['answer4'] as String,
-        difficultylevel: json['difficultylevel'] as int,
-        subject: json['subject'] as String,
-        category: json['category'] as String,
-        timestamp: json['timestamp'] as String,
-        qid: json['qid'] as int);
+        question: jsonMap['question'] as String,
+        qimage: jsonMap['qimage'] as String,
+        aimage: jsonMap['aimage'] as String,
+        correctanswerindex: jsonMap['correctanswerindex'] as int,
+        answertext: jsonMap['answertext'] as String,
+        answer1: jsonMap['answer1'] as String,
+        answer2: jsonMap['answer2'] as String,
+        answer3: jsonMap['answer3'] as String,
+        answer4: jsonMap['answer4'] as String,
+        difficultylevel: jsonMap['difficultylevel'] as int,
+        subject: jsonMap['subject'] as String,
+        category: jsonMap['category'] as String,
+        timestamp: jsonMap['timestamp'] as String,
+        qid: jsonMap['qid'] as int);
+  }
+  void printMap (Map<String, dynamic> jsonMap) {
+    print(jsonMap['question']);
+    print(jsonMap['qimage']);
+    print(jsonMap['aimage']);
+    print(jsonMap['correctanswerindex']);
+    print(jsonMap['answertext']);
+    print(jsonMap['answer1']);
+    print(jsonMap['answer2']);
+    print(jsonMap['answer3']);
+    print(jsonMap['answer4']);
+    print(jsonMap['difficultylevel']);
+    print(jsonMap['subject']);
+    print(jsonMap['category']);
+    print(jsonMap['timestamp']);
+    print(jsonMap['qid']);
   }
 }

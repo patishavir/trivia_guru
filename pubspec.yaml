@@ -17,12 +17,13 @@ dependencies:
 
   cupertino_icons: ^1.0.6
   logging: ^1.1.0
-  build_runner: ^2.3.2
-  build_web_compilers: ^4.0.7
+  build_runner: ^2.4.8
+  build_web_compilers: ^4.0.9
   confetti: ^0.7.0
   blinking_text: ^1.0.2
   path_provider: ^2.0.13
   path: ^1.8.3
+  get: ^4.6.6
   provider: ^6.1.1
 
 dev_dependencies:

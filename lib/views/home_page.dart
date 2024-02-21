@@ -1,46 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:trivia_guru/pages/home_page_widgets.dart';
+import 'package:trivia_guru/views/home_page_widgets.dart';
 import '../objects/score.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../objects/question.dart';
-import '../pages/confetti_page.dart';
-import '../providers/status_provider.dart';
+import '../views/confetti_page.dart';
+import '../controllers/status_controller.dart';
 import '../utils/questions_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
 
   late BuildContext context;
-  late Question question ;
+  late Question question;
+
   bool isCorrectAnswer = false;
+  final StatusController statusController = Get.put(StatusController());
 
   @override
   Widget build(BuildContext context) {
+    LoggingUtils.writeLog("Start building MyHomePage ...");
     this.context = context;
-    question = QuestionsUtils.getQuestion(context.read<StatusProvider>().currentQuestionIndex);
-    return Consumer<StatusProvider>(
-      builder: (context, statusProvider, _) => Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.red, width: 1.0),
-        ),
-        constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
-        child: Scaffold(
-          appBar: AppBar(
-            // title: Text(widget.title),
-            title: Text(
-              AppLocalizations.of(context)!.app_title,
-            ),
-            centerTitle: true,
+    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.red, width: 1.0),
+      ),
+      constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
+      child: Scaffold(
+        appBar: AppBar(
+          // title: Text(widget.title),
+          title: Text(
+            AppLocalizations.of(context)!.app_title,
           ),
-          body: Center(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                child: Column(
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Align(
+            alignment: Alignment.topLeft,
+            child: SingleChildScrollView(
+              child: Obx(
+                () => Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
@@ -55,6 +58,7 @@ class MyHomePage extends StatelessWidget {
   }
 
   List<Widget> getWidgetList() {
+    LoggingUtils.writeLog("Starting getWidgetList in home_page ...");
     List<Widget> widgetList = [];
 
     if (question.qimage != null && question.qimage!.isNotEmpty) {
@@ -65,24 +69,24 @@ class MyHomePage extends StatelessWidget {
     );
     // next question container
     widgetList.add(
-      getSelectAnAnswerRow(question, context, this),
+      getSelectAnAnswerRow(question, context, this, statusController),
     );
     widgetList
-        .addAll(getAnswerButtons(question, this, isCorrectAnswer, context));
+        .addAll(getAnswerButtons(question, this, isCorrectAnswer, statusController));
 
     // add divider
     widgetList.add(getDivider());
     // add answer text
-    if (!Provider.of<StatusProvider>(context, listen: false)
-        .isWaitingForAnAnswer) {
-      widgetList.add(getAnswerText(question, context));
+    if (!statusController.isWaitingForAnAnswer) {
+      widgetList.add(getAnswerTextWidget(question, context));
     }
     return widgetList;
   }
 
   void processAnswerButtonClick(int i) {
+    LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ...");
     SessionData.selectedAnswer = i + 1;
-    question = QuestionsUtils.getQuestion(context.read<StatusProvider>().currentQuestionIndex);
+    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
     isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
     if (isCorrectAnswer) {
       Score.incrementCorrectAnswers();
@@ -91,20 +95,20 @@ class MyHomePage extends StatelessWidget {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    Provider.of<StatusProvider>(context, listen: false)
-        .setIsWaitingForAnAnswer(false);
+    statusController.setIsWaitingForAnAnswer(false);
   }
 
-  void processNextQuestionButton() {
-    if ((context.watch<StatusProvider>().currentQuestionIndex + 1) == GameConfig.questionsPerGame) {
+  void processNextQuestionButtonPress() {
+    LoggingUtils.writeLog("Starting processNextQuestionButtonPress in home_page ...");
+    if ((SessionData.currentQuestionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const ConfettiPage(),
         ),
       );
     } else {
-      Provider.of<StatusProvider>(context, listen: false)
-          .incrementCurrentQuestionIndex();
+      SessionData.incrementCurrentQuestionIndex();
+      SessionData.selectedAnswer = 0;
     }
   }
 }

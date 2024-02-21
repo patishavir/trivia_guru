@@ -164,20 +164,23 @@ class QuestionsUtils {
 
   static List<Question> questionsFromJson(String jsonArray) {
     final List<dynamic> dynamicList = jsonDecode(jsonArray);
-    LoggingUtils.writeLog(dynamicList.toString());
+    // LoggingUtils.writeLog(dynamicList.toString());
     Map<String, dynamic> map1 = dynamicList[0];
     List<Question> questionsList =
         List<Question>.from(dynamicList.map((x) => Question.fromJson(x)));
+    LoggingUtils.writeLog("questionsFromJson has completed ...");
     return questionsList;
   }
 
-  static Question getQuestion(int index) {
+  static Question getQuestion(int questionIndex) {
     if (questionsList.isEmpty) {
       questionsList = questionsFromJson(_jsonString);
+      LoggingUtils.writeLog("getQuestion: printing  questionsList ...");
       for (Question question in questionsList) {
         LoggingUtils.writeLog(question.question);
       }
     }
-    return questionsList.elementAt(index);
+    LoggingUtils.writeLog("getQuestion: return question number $questionIndex");
+    return questionsList.elementAt(questionIndex);
   }
 }

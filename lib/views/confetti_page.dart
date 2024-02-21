@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +32,12 @@ class ConfettiPageState extends State<ConfettiPage> {
   void dispose() {
     super.dispose();
     confettiController.dispose();
-    debugPrint("dispose method has completed");
+    LoggingUtils.writeLog("dispose method has completed");
   }
 
   @override
   Widget build(BuildContext context) {
+    LoggingUtils.writeLog("start building ConfettiPageState ...");
     return Scaffold(
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
@@ -72,6 +72,7 @@ class ConfettiPageState extends State<ConfettiPage> {
   }
 
   Align buildConfettiWidget(controller, double blastDirection) {
+    LoggingUtils.writeLog("starting buildConfettiWidget ...");
     return Align(
       alignment: Alignment.topCenter,
       child: ConfettiWidget(

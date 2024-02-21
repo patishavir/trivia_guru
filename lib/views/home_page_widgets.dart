@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../objects/score.dart';
-import '../providers/status_provider.dart';
+import '../controllers/status_controller.dart';
 import 'home_page.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../objects/question.dart';
+import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../controllers/status_controller.dart';
 
 Widget getQuestionImage(Question question) {
   return Center(
@@ -20,6 +22,7 @@ Widget getQuestionImage(Question question) {
 }
 
 Widget getQuestionWidget(Question question) {
+  LoggingUtils.writeLog("Starting getQuestionWidget in home_page_widgets ...");
   return Container(
     margin: const EdgeInsets.all(4.0),
     padding: const EdgeInsets.all(4.0),
@@ -35,13 +38,14 @@ Widget getQuestionWidget(Question question) {
   );
 }
 
-Widget getSelectAnAnswerRow(
-    Question question, BuildContext context, MyHomePage myHomePageState) {
+Widget getSelectAnAnswerRow(Question question, BuildContext context,
+    MyHomePage myHomePage, StatusController controller) {
+  LoggingUtils.writeLog(
+      "Starting getSelectAnAnswerRow in home_page_widgets ...");
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      Provider.of<StatusProvider>(context, listen: false)
-      .isWaitingForAnAnswer
+      controller.isWaitingForAnAnswer
           ? Text(
               AppLocalizations.of(context)!.select_an_answer,
               style: const TextStyle(
@@ -53,8 +57,7 @@ Widget getSelectAnAnswerRow(
             )
           : ElevatedButton(
               style: const ButtonStyle(
-                backgroundColor:
-                    MaterialStatePropertyAll<Color>(Colors.white),
+                backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
               ),
               child: Text(
                 '${AppLocalizations.of(context)!.next_question} >',
@@ -64,14 +67,16 @@ Widget getSelectAnAnswerRow(
                     color: Color.fromARGB(255, 0, 0, 255)),
               ),
               onPressed: () {
-                myHomePageState.processNextQuestionButton();
+                myHomePage.processNextQuestionButtonPress();
+                controller.setIsWaitingForAnAnswer(true);
+                SessionData.incrementCurrentQuestionIndex();
               },
             ),
       const Spacer(),
       Text('${AppLocalizations.of(context)!.score}: ',
           style: Theme.of(context).textTheme.bodyLarge),
       Text(
-       Score.correctAnswers.toString(),
+        Score.correctAnswers.toString(),
         style: const TextStyle(
             fontSize: GameConfig.fontSize,
             backgroundColor: Colors.green,
@@ -92,8 +97,9 @@ Widget getSelectAnAnswerRow(
   );
 }
 
-List<Widget> getAnswerButtons(
-    Question question, MyHomePage myHomePage, bool isCorrectAnswer, BuildContext context) {
+List<Widget> getAnswerButtons(Question question, MyHomePage myHomePage,
+    bool isCorrectAnswer, StatusController controller) {
+  LoggingUtils.writeLog("Starting getAnswerButtons in home_page_widgets ...");
   List<Widget> answerButtonList = [];
   answerButtonList.clear();
   List<String> answers = [
@@ -103,7 +109,7 @@ List<Widget> getAnswerButtons(
     question.answer4
   ];
   for (int i = 0; i < GameConfig.answersCount; i++) {
-    LoggingUtils.writeLog('iteration number: $i');
+    LoggingUtils.writeLog('building answer button number: $i');
     Color? buttonColor = Colors.grey[400];
     if (i == SessionData.selectedAnswer - 1) {
       buttonColor = isCorrectAnswer ? Colors.green : Colors.red;
@@ -112,12 +118,11 @@ List<Widget> getAnswerButtons(
       Container(
         margin: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed:  Provider.of<StatusProvider>(context, listen: false)
-              .isWaitingForAnAnswer
+          onPressed: controller.isWaitingForAnAnswer
               ? () {
-            onPressed:  Provider.of<StatusProvider>(context, listen: false)
-                .setIsWaitingForAnAnswer(false);
+                  onPressed:
                   myHomePage.processAnswerButtonClick(i);
+                  controller.setIsWaitingForAnAnswer(false);
                 }
               : null,
           style: TextButton.styleFrom(
@@ -134,17 +139,18 @@ List<Widget> getAnswerButtons(
   return answerButtonList;
 }
 
-Widget getAnswerText (Question question, BuildContext context) {
+Widget getAnswerTextWidget(Question question, BuildContext context) {
+  LoggingUtils.writeLog(
+      "Starting getAnswerTextWidget in home_page_widgets ...");
   return Container(
     margin: const EdgeInsets.all(10.0),
-    child: Text(question.answertext,
-        style: Theme
-            .of(context)
-            .textTheme
-            .bodyLarge),
+    child:
+        Text(question.answertext, style: Theme.of(context).textTheme.bodyLarge),
   );
 }
-Widget getDivider () {
+
+Widget getDivider() {
+  LoggingUtils.writeLog("Starting getDivider ...");
   return const Divider(
     color: Colors.red,
     height: 5.0,
