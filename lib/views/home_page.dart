@@ -24,7 +24,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggingUtils.writeLog("Start building MyHomePage ...");
     this.context = context;
-    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+    question = QuestionsUtils.getQuestion(statusController.currentQuestionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -86,7 +86,7 @@ class MyHomePage extends StatelessWidget {
   void processAnswerButtonClick(int i) {
     LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ...");
     SessionData.selectedAnswer = i + 1;
-    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+    question = QuestionsUtils.getQuestion(statusController.currentQuestionIndex);
     isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
     if (isCorrectAnswer) {
       Score.incrementCorrectAnswers();
@@ -100,14 +100,14 @@ class MyHomePage extends StatelessWidget {
 
   void processNextQuestionButtonPress() {
     LoggingUtils.writeLog("Starting processNextQuestionButtonPress in home_page ...");
-    if ((SessionData.currentQuestionIndex + 1) == GameConfig.questionsPerGame) {
+    if ((statusController.currentQuestionIndex + 1) == GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const ConfettiPage(),
         ),
       );
     } else {
-      SessionData.incrementCurrentQuestionIndex();
+      statusController.incrementCurrentQuestionIndex();
       SessionData.selectedAnswer = 0;
     }
   }

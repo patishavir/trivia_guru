@@ -69,7 +69,7 @@ Widget getSelectAnAnswerRow(Question question, BuildContext context,
               onPressed: () {
                 myHomePage.processNextQuestionButtonPress();
                 controller.setIsWaitingForAnAnswer(true);
-                SessionData.incrementCurrentQuestionIndex();
+                controller.incrementCurrentQuestionIndex();
               },
             ),
       const Spacer(),
