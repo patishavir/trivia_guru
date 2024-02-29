@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import '../objects/score.dart';
+import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

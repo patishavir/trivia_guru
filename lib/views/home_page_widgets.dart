@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../objects/score.dart';
+import '../model/score.dart';
 import '../controllers/status_controller.dart';
 import 'home_page.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
-import '../objects/question.dart';
+import '../model/question.dart';
 import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../controllers/status_controller.dart';
@@ -68,8 +68,6 @@ Widget getSelectAnAnswerRow(Question question, BuildContext context,
               ),
               onPressed: () {
                 myHomePage.processNextQuestionButtonPress();
-                controller.setIsWaitingForAnAnswer(true);
-                controller.incrementCurrentQuestionIndex();
               },
             ),
       const Spacer(),

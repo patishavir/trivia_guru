@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:trivia_guru/views/home_page_widgets.dart';
-import '../objects/score.dart';
+import '../model/score.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
-import '../objects/question.dart';
+import '../model/question.dart';
 import '../views/confetti_page.dart';
 import '../controllers/status_controller.dart';
 import '../utils/questions_utils.dart';
@@ -108,6 +108,7 @@ class MyHomePage extends StatelessWidget {
       );
     } else {
       statusController.incrementCurrentQuestionIndex();
+      statusController.setIsWaitingForAnAnswer(true);
       SessionData.selectedAnswer = 0;
     }
   }
