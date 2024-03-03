@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../model/score.dart';
-import '../controllers/status_controller.dart';
+import '../controllers/state_controller.dart';
 import 'home_page.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -9,7 +9,7 @@ import '../config/session_data.dart';
 import '../model/question.dart';
 import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../controllers/status_controller.dart';
+import '../controllers/state_controller.dart';
 
 Widget getQuestionImage(Question question) {
   return Center(
@@ -39,13 +39,13 @@ Widget getQuestionWidget(Question question) {
 }
 
 Widget getSelectAnAnswerRow(Question question, BuildContext context,
-    MyHomePage myHomePage, StatusController controller) {
+    MyHomePage myHomePage, StateController controller) {
   LoggingUtils.writeLog(
       "Starting getSelectAnAnswerRow in home_page_widgets ...");
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      controller.isWaitingForAnAnswer
+      controller.gameState == GameState.displayAnswer
           ? Text(
               AppLocalizations.of(context)!.select_an_answer,
               style: const TextStyle(
@@ -96,7 +96,7 @@ Widget getSelectAnAnswerRow(Question question, BuildContext context,
 }
 
 List<Widget> getAnswerButtons(Question question, MyHomePage myHomePage,
-    bool isCorrectAnswer, StatusController controller) {
+    bool isCorrectAnswer, StateController stateController) {
   LoggingUtils.writeLog("Starting getAnswerButtons in home_page_widgets ...");
   List<Widget> answerButtonList = [];
   answerButtonList.clear();
@@ -116,11 +116,11 @@ List<Widget> getAnswerButtons(Question question, MyHomePage myHomePage,
       Container(
         margin: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed: controller.isWaitingForAnAnswer
+          onPressed: stateController.gameState == GameState.displayQuestion
               ? () {
                   onPressed:
                   myHomePage.processAnswerButtonClick(i);
-                  controller.setIsWaitingForAnAnswer(false);
+                  stateController.setGameState(GameState.displayAnswer);
                 }
               : null,
           style: TextButton.styleFrom(
