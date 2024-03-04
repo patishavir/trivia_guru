@@ -10,17 +10,17 @@ enum GameState {
 }
 
 class StateController extends GetxController {
-  var _gameState = GameState.initial.obs;
+  var gameState = GameState.initial.obs;
   int _currentQuestionIndex = 0;
 
-  GameState get gameState {
-    LoggingUtils.writeLog("got _gameState: $_gameState.value !");
-    return _gameState.value;
+  GameState get gameStatee {
+    LoggingUtils.writeLog("got _gameState: $gameState.value !");
+    return gameState.value;
   }
 
-  set setGameState(GameState gameState) {
-    _gameState = gameState.obs;
-    LoggingUtils.writeLog("_gameState set to  $_gameState.value !");
+  set setGameState(GameState gameStateee) {
+    gameState = gameStateee.obs;
+    LoggingUtils.writeLog("_gameState set to  $gameState.value !");
   }
 
   int get currentQuestionIndex => _currentQuestionIndex;

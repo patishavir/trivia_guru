@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_guru/views/future_builder.dart';
+import 'package:trivia_guru/utils/future_builder.dart';
 import 'package:trivia_guru/views/home_page_widgets.dart';
 import '../model/score.dart';
 import '../common/logging_utils.dart';
@@ -25,7 +25,6 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     LoggingUtils.writeLog("Start building MyHomePage ...");
     this.context = context;
-    question = QuestionsUtils.getQuestion(stateController.currentQuestionIndex);
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
@@ -61,29 +60,29 @@ class MyHomePage extends StatelessWidget {
   List<Widget> getWidgetList() {
     LoggingUtils.writeLog("Starting getWidgetList in home_page ...");
     List<Widget> widgetList = [];
+    if (stateController.gameStatee == GameState.initial) {
+      runFutureBuilder();
+      stateController.gameStatee == GameState.displayQuestion;
+    }
+    question = QuestionsUtils.getQuestion(stateController.currentQuestionIndex);
+    if (question.qimage != null && question.qimage!.isNotEmpty) {
+      widgetList.add(getQuestionImage(question));
+    }
+    widgetList.add(
+      getQuestionWidget(question),
+    );
+    // next question container
+    widgetList.add(
+      getSelectAnAnswerRow(question, context, this, stateController),
+    );
+    widgetList.addAll(
+        getAnswerButtons(question, this, isCorrectAnswer, stateController));
 
-    if (stateController.gameState == GameState.initial) {
-      widgetList.add(getFutureBuilder());
-    } else {
-      if (question.qimage != null && question.qimage!.isNotEmpty) {
-        widgetList.add(getQuestionImage(question));
-      }
-      widgetList.add(
-        getQuestionWidget(question),
-      );
-      // next question container
-      widgetList.add(
-        getSelectAnAnswerRow(question, context, this, stateController),
-      );
-      widgetList.addAll(
-          getAnswerButtons(question, this, isCorrectAnswer, stateController));
-
-      // add divider
-      widgetList.add(getDivider());
-      // add answer text
-      if (stateController.gameState == GameState.displayAnswer) {
-        widgetList.add(getAnswerTextWidget(question, context));
-      }
+    // add divider
+    widgetList.add(getDivider());
+    // add answer text
+    if (stateController.gameStatee == GameState.displayAnswer) {
+      widgetList.add(getAnswerTextWidget(question, context));
     }
     return widgetList;
   }
@@ -100,7 +99,7 @@ class MyHomePage extends StatelessWidget {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    stateController.setGameState(GameState.clickNextButton);
+    stateController.gameState = GameState.clickNextButton.obs;
   }
 
   void processNextQuestionButtonPress() {

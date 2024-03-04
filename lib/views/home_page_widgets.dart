@@ -10,6 +10,7 @@ import '../model/question.dart';
 import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../controllers/state_controller.dart';
+import 'package:get/get.dart';
 
 Widget getQuestionImage(Question question) {
   return Center(
@@ -45,7 +46,7 @@ Widget getSelectAnAnswerRow(Question question, BuildContext context,
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      controller.gameState == GameState.displayAnswer
+      controller.gameStatee == GameState.displayAnswer
           ? Text(
               AppLocalizations.of(context)!.select_an_answer,
               style: const TextStyle(
@@ -116,11 +117,11 @@ List<Widget> getAnswerButtons(Question question, MyHomePage myHomePage,
       Container(
         margin: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed: stateController.gameState == GameState.displayQuestion
+          onPressed: stateController.gameStatee == GameState.displayQuestion
               ? () {
                   onPressed:
                   myHomePage.processAnswerButtonClick(i);
-                  stateController.setGameState(GameState.displayAnswer);
+                  stateController.gameState = GameState.displayAnswer.obs;
                 }
               : null,
           style: TextButton.styleFrom(
