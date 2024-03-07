@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../model/score.dart';
 import '../controllers/state_controller.dart';
 import 'home_page.dart';
@@ -7,10 +6,7 @@ import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../model/question.dart';
-import '../common/logging_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../controllers/state_controller.dart';
-import 'package:get/get.dart';
 
 Widget getQuestionImage(Question question) {
   return Center(
@@ -46,7 +42,7 @@ Widget getSelectAnAnswerRow(Question question, BuildContext context,
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      controller.gameStatee == GameState.displayAnswer
+      controller.gameState == GameState.displayQuestion
           ? Text(
               AppLocalizations.of(context)!.select_an_answer,
               style: const TextStyle(
@@ -117,11 +113,10 @@ List<Widget> getAnswerButtons(Question question, MyHomePage myHomePage,
       Container(
         margin: const EdgeInsets.all(10.0),
         child: TextButton(
-          onPressed: stateController.gameStatee == GameState.displayQuestion
+          onPressed: stateController.gameState == GameState.displayQuestion
               ? () {
-                  onPressed:
                   myHomePage.processAnswerButtonClick(i);
-                  stateController.gameState = GameState.displayAnswer.obs;
+                  stateController.setGameState = GameState.displayAnswer;
                 }
               : null,
           style: TextButton.styleFrom(

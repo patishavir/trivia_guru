@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import '../common/logging_utils.dart';
 
 enum GameState {
-  initial,
   displayQuestion,
   displayAnswer,
   clickNextButton,
@@ -10,17 +9,17 @@ enum GameState {
 }
 
 class StateController extends GetxController {
-  var gameState = GameState.initial.obs;
+  var _gameState = GameState.displayQuestion.obs;
   int _currentQuestionIndex = 0;
 
-  GameState get gameStatee {
-    LoggingUtils.writeLog("got _gameState: $gameState.value !");
-    return gameState.value;
+   get gameState {
+    LoggingUtils.writeLog("state_controller get _gameState: ${_gameState.value} !");
+    return _gameState.value;
   }
 
-  set setGameState(GameState gameStateee) {
-    gameState = gameStateee.obs;
-    LoggingUtils.writeLog("_gameState set to  $gameState.value !");
+  set setGameState(GameState gameState) {
+    _gameState = gameState.obs;
+    LoggingUtils.writeLog("state_controller _gameState set to  ${_gameState.value} !");
   }
 
   int get currentQuestionIndex => _currentQuestionIndex;
@@ -28,6 +27,6 @@ class StateController extends GetxController {
   void incrementCurrentQuestionIndex() {
     _currentQuestionIndex++;
     LoggingUtils.writeLog(
-        "_currentQuestionIndex has been incremented to $_currentQuestionIndex.value !");
+        "state_controller _currentQuestionIndex has been incremented to $_currentQuestionIndex !");
   }
 }

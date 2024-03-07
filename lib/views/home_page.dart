@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:trivia_guru/utils/future_builder.dart';
 import 'package:trivia_guru/views/home_page_widgets.dart';
 import '../model/score.dart';
 import '../common/logging_utils.dart';
@@ -58,12 +57,8 @@ class MyHomePage extends StatelessWidget {
   }
 
   List<Widget> getWidgetList() {
-    LoggingUtils.writeLog("Starting getWidgetList in home_page ...");
+    LoggingUtils.writeLog("Starting getWidgetList in home_page ... gameState: ${stateController.gameState}");
     List<Widget> widgetList = [];
-    if (stateController.gameStatee == GameState.initial) {
-      runFutureBuilder();
-      stateController.gameStatee == GameState.displayQuestion;
-    }
     question = QuestionsUtils.getQuestion(stateController.currentQuestionIndex);
     if (question.qimage != null && question.qimage!.isNotEmpty) {
       widgetList.add(getQuestionImage(question));
@@ -81,12 +76,11 @@ class MyHomePage extends StatelessWidget {
     // add divider
     widgetList.add(getDivider());
     // add answer text
-    if (stateController.gameStatee == GameState.displayAnswer) {
+    if (stateController.gameState == GameState.displayAnswer) {
       widgetList.add(getAnswerTextWidget(question, context));
     }
     return widgetList;
   }
-
   void processAnswerButtonClick(int i) {
     LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ...");
     SessionData.selectedAnswer = i + 1;
@@ -99,7 +93,6 @@ class MyHomePage extends StatelessWidget {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    stateController.gameState = GameState.clickNextButton.obs;
   }
 
   void processNextQuestionButtonPress() {

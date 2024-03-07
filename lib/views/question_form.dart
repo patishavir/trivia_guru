@@ -20,24 +20,25 @@ class QuestionFormApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
       ],
       child: Consumer<LocaleProvider>(
-          builder: (context, localeModel, child) => MaterialApp(
-                debugShowCheckedModeBanner: false,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                locale: localeModel.locale,
-                title: localeModel.locale == LocaleProvider.hebrewLocale
-                    ? heTitle
-                    : enTitle,
-                theme: ThemeData(
-                  primarySwatch: Colors.blue,
-                  fontFamily: GameConfig.fontFamily,
-                  textTheme: const TextTheme(
-                    bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
-                    labelLarge: TextStyle(fontSize: GameConfig.fontSize),
-                  ),
-                ),
-                home: MyHomePage(),
-              )),
+        builder: (context, localeModel, child) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: localeModel.locale,
+          title: localeModel.locale == LocaleProvider.hebrewLocale
+              ? heTitle
+              : enTitle,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            fontFamily: GameConfig.fontFamily,
+            textTheme: const TextTheme(
+              bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
+              labelLarge: TextStyle(fontSize: GameConfig.fontSize),
+            ),
+          ),
+          home: MyHomePage(),
+        ),
+      ),
     );
   }
 }

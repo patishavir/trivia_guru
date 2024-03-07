@@ -3,8 +3,9 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
 import 'questions_utils.dart';
+import '../views/question_form.dart';
 
-void runFutureBuilder() {
+Widget runFutureBuilder() {
   FutureBuilder(
     builder: (ctx, snapshot) {
 // Checking if future is resolved or not
@@ -24,6 +25,7 @@ void runFutureBuilder() {
           QuestionsUtils.jsonString = data;
           QuestionsUtils.buildQuestionListFromJsonString();
           LoggingUtils.writeLog(QuestionsUtils.jsonString);
+          return const QuestionFormApp();
           return const Center(
             child: Text(
               "Questions have been successfully loaded",
@@ -42,4 +44,5 @@ void runFutureBuilder() {
 // inorder to display something on the Canvas
     future: rootBundle.loadString(GameConfig.questionsFilePath),
   );
+  return const QuestionFormApp();
 }

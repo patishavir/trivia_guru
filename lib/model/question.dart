@@ -70,19 +70,19 @@ class Question {
         qid: jsonMap['qid'] as int);
   }
   void printMap (Map<String, dynamic> jsonMap) {
-    print(jsonMap['question']);
-    print(jsonMap['qimage']);
-    print(jsonMap['aimage']);
-    print(jsonMap['correctanswerindex']);
-    print(jsonMap['answertext']);
-    print(jsonMap['answer1']);
-    print(jsonMap['answer2']);
-    print(jsonMap['answer3']);
-    print(jsonMap['answer4']);
-    print(jsonMap['difficultylevel']);
-    print(jsonMap['subject']);
-    print(jsonMap['category']);
-    print(jsonMap['timestamp']);
-    print(jsonMap['qid']);
+    LoggingUtils.writeLog(jsonMap['question']);
+    LoggingUtils.writeLog(jsonMap['qimage']);
+    LoggingUtils.writeLog(jsonMap['aimage']);
+    LoggingUtils.writeLog(jsonMap['correctanswerindex']);
+    LoggingUtils.writeLog(jsonMap['answertext']);
+    LoggingUtils.writeLog(jsonMap['answer1']);
+    LoggingUtils.writeLog(jsonMap['answer2']);
+    LoggingUtils.writeLog(jsonMap['answer3']);
+    LoggingUtils.writeLog(jsonMap['answer4']);
+    LoggingUtils.writeLog(jsonMap['difficultylevel']);
+    LoggingUtils.writeLog(jsonMap['subject']);
+    LoggingUtils.writeLog(jsonMap['category']);
+    LoggingUtils.writeLog(jsonMap['timestamp']);
+    LoggingUtils.writeLog(jsonMap['qid']);
   }
 }
