@@ -24,7 +24,7 @@ class QuestionsUtils {
 
   static Question getQuestion(int questionIndex) {
     LoggingUtils.writeLog(
-        "return question number $questionIndex:\n${_questionsList.elementAt(questionIndex)}");
+        "getQuestion: return question number $questionIndex:  ${_questionsList.elementAt(questionIndex).question}");
     return _questionsList.elementAt(questionIndex);
   }
 }

@@ -59,7 +59,7 @@ class MyHomePage extends StatelessWidget {
   List<Widget> getWidgetList() {
     LoggingUtils.writeLog("Starting getWidgetList in home_page ... gameState: ${stateController.gameState}");
     List<Widget> widgetList = [];
-    question = QuestionsUtils.getQuestion(stateController.currentQuestionIndex);
+    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
     if (question.qimage != null && question.qimage!.isNotEmpty) {
       widgetList.add(getQuestionImage(question));
     }
@@ -76,16 +76,16 @@ class MyHomePage extends StatelessWidget {
     // add divider
     widgetList.add(getDivider());
     // add answer text
-    if (stateController.gameState == GameState.displayAnswer) {
+    if (stateController.gameState == GameStateEnum.displayAnswer.obs) {
       widgetList.add(getAnswerTextWidget(question, context));
     }
     return widgetList;
   }
   void processAnswerButtonClick(int i) {
-    LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ...");
+    LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ... Button: $i");
     SessionData.selectedAnswer = i + 1;
-    question = QuestionsUtils.getQuestion(stateController.currentQuestionIndex);
-    isCorrectAnswer = question.correctanswerindex == SessionData.selectedAnswer;
+    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+    isCorrectAnswer = (question.correctanswerindex == SessionData.selectedAnswer);
     if (isCorrectAnswer) {
       Score.incrementCorrectAnswers();
     } else {
@@ -93,12 +93,13 @@ class MyHomePage extends StatelessWidget {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
+    stateController.gameState = GameStateEnum.displayAnswer.obs;
   }
 
   void processNextQuestionButtonPress() {
     LoggingUtils.writeLog(
         "Starting processNextQuestionButtonPress in home_page ...");
-    if ((stateController.currentQuestionIndex + 1) ==
+    if ((SessionData.currentQuestionIndex + 1) ==
         GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -106,9 +107,10 @@ class MyHomePage extends StatelessWidget {
         ),
       );
     } else {
-      stateController.incrementCurrentQuestionIndex();
-      stateController.setGameState = GameState.displayQuestion;
+      SessionData.incrementCurrentQuestionIndex();
+      stateController.gameState = GameStateEnum.displayQuestion.obs;
       SessionData.selectedAnswer = 0;
+      SessionData.incrementCurrentQuestionIndex;
     }
   }
 }
