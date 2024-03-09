@@ -5,31 +5,36 @@ import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../model/question.dart';
 import '../views/confetti_page.dart';
-import '../providers/game_state_provider.dart';
 import '../utils/questions_utils.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({super.key});
+enum GameStateEnum { displayQuestion, displayAnswer, clickNextButton, gameOver }
 
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
   late BuildContext context;
   late Question question;
-  late GameStateProvider gameStateProvider;
 
   bool isCorrectAnswer = false;
-
+  var _gameState = GameStateEnum.displayQuestion;
+  void _setGameState(GameStateEnum gameState) {
+    setState(() {
+      _gameState = gameState;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     LoggingUtils.writeLog("Start building MyHomePage ...");
     this.context = context;
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => GameStateProvider()),
-      ],
-      child: Consumer<GameStateProvider>(
-        builder: (context, gameStateProvider, child) => Container(
+    return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 1.0),
       ),
@@ -47,23 +52,21 @@ class MyHomePage extends StatelessWidget {
             alignment: Alignment.topLeft,
             child: SingleChildScrollView(
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: getWidgetList(),
-                ),
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: getWidgetList(),
               ),
             ),
           ),
         ),
       ),
-      ),
     );
   }
 
   List<Widget> getWidgetList() {
-    gameStateProvider = Provider.of<GameStateProvider>(context, listen: false);
-    LoggingUtils.writeLog("Starting getWidgetList in home_page ... gameState: ${gameStateProvider.gameState}");
+    LoggingUtils.writeLog(
+        "Starting getWidgetList in home_page ... gameState: $_gameState");
     List<Widget> widgetList = [];
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
     if (question.qimage != null && question.qimage!.isNotEmpty) {
@@ -76,22 +79,24 @@ class MyHomePage extends StatelessWidget {
     widgetList.add(
       getSelectAnAnswerRow(),
     );
-    widgetList.addAll(
-        getAnswerButtons());
+    widgetList.addAll(getAnswerButtons());
 
     // add divider
     widgetList.add(getDivider());
     // add answer text
-    if (gameStateProvider.gameState == GameStateEnum.displayAnswer) {
+    if (_gameState == GameStateEnum.displayAnswer) {
       widgetList.add(getAnswerTextWidget());
     }
     return widgetList;
   }
+
   void processAnswerButtonClick(int i) {
-    LoggingUtils.writeLog("Starting processAnswerButtonClick in home_page ... Button: $i");
+    LoggingUtils.writeLog(
+        "Starting processAnswerButtonClick in home_page ... Button: $i");
     SessionData.selectedAnswer = i + 1;
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
-    isCorrectAnswer = (question.correctanswerindex == SessionData.selectedAnswer);
+    isCorrectAnswer =
+        (question.correctanswerindex == SessionData.selectedAnswer);
     if (isCorrectAnswer) {
       Score.incrementCorrectAnswers();
     } else {
@@ -99,38 +104,40 @@ class MyHomePage extends StatelessWidget {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    gameStateProvider.setGameState(GameStateEnum.displayQuestion);
+    _setGameState(GameStateEnum.displayQuestion);
   }
 
   void processNextQuestionButtonPress() {
+    SessionData.incrementCurrentQuestionIndex();
     LoggingUtils.writeLog(
-        "Starting processNextQuestionButtonPress in home_page ...");
-    if ((SessionData.currentQuestionIndex + 1) ==
-        GameConfig.questionsPerGame) {
+        "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
+    if ((SessionData.currentQuestionIndex) >= GameConfig.questionsPerGame) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => const ConfettiPage(),
         ),
       );
     } else {
-      SessionData.incrementCurrentQuestionIndex();
-      gameStateProvider.setGameState(GameStateEnum.displayQuestion);
+      _setGameState(GameStateEnum.displayQuestion);
       SessionData.selectedAnswer = 0;
-      SessionData.incrementCurrentQuestionIndex;
+
     }
   }
+
   Widget getQuestionImage() {
     return Center(
       child: SizedBox(
         width: 200.0,
         height: 200.0,
-        child: Image.asset('assets/images/${question.qimage}', fit: BoxFit.fill),
+        child:
+            Image.asset('assets/images/${question.qimage}', fit: BoxFit.fill),
       ),
     );
   }
 
   Widget getQuestionWidget() {
-    LoggingUtils.writeLog("Starting getQuestionWidget in home_page_widgets ...");
+    LoggingUtils.writeLog(
+        "Starting getQuestionWidget in home_page_widgets ...");
     return Container(
       margin: const EdgeInsets.all(4.0),
       padding: const EdgeInsets.all(4.0),
@@ -141,7 +148,7 @@ class MyHomePage extends StatelessWidget {
       child: Text(
         question.question,
         style:
-        const TextStyle(fontSize: GameConfig.fontSize, color: Colors.white),
+            const TextStyle(fontSize: GameConfig.fontSize, color: Colors.white),
       ),
     );
   }
@@ -152,31 +159,32 @@ class MyHomePage extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        gameStateProvider.gameState == GameStateEnum.displayQuestion
+        _gameState == GameStateEnum.displayQuestion
             ? Text(
-          AppLocalizations.of(context)!.select_an_answer,
-          style: const TextStyle(
-            fontSize: GameConfig.fontSize,
-            fontWeight: FontWeight.bold,
-            color: Color.fromARGB(255, 0, 0, 255),
-            backgroundColor: Colors.white,
-          ),
-        )
+                AppLocalizations.of(context)!.select_an_answer,
+                style: const TextStyle(
+                  fontSize: GameConfig.fontSize,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 0, 0, 255),
+                  backgroundColor: Colors.white,
+                ),
+              )
             : ElevatedButton(
-          style: const ButtonStyle(
-            backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
-          ),
-          child: Text(
-            '${AppLocalizations.of(context)!.next_question} >',
-            style: const TextStyle(
-                fontSize: GameConfig.fontSize,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 0, 0, 255)),
-          ),
-          onPressed: () {
-            processNextQuestionButtonPress();
-          },
-        ),
+                style: const ButtonStyle(
+                  backgroundColor:
+                      MaterialStatePropertyAll<Color>(Colors.white),
+                ),
+                child: Text(
+                  '${AppLocalizations.of(context)!.next_question} >',
+                  style: const TextStyle(
+                      fontSize: GameConfig.fontSize,
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 0, 0, 255)),
+                ),
+                onPressed: () {
+                  processNextQuestionButtonPress();
+                },
+              ),
         const Spacer(),
         Text('${AppLocalizations.of(context)!.score}: ',
             style: Theme.of(context).textTheme.bodyLarge),
@@ -222,12 +230,12 @@ class MyHomePage extends StatelessWidget {
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: (gameStateProvider.gameState == GameStateEnum.displayQuestion)
+            onPressed: (_gameState == GameStateEnum.displayQuestion)
                 ? () {
-              LoggingUtils.writeLog("inside answerButton onPressed");
-              processAnswerButtonClick(i);
-              gameStateProvider.setGameState(GameStateEnum.displayAnswer);
-            }
+                    LoggingUtils.writeLog("inside answerButton onPressed");
+                    processAnswerButtonClick(i);
+                    _setGameState(GameStateEnum.displayAnswer);
+                  }
                 : null,
             style: TextButton.styleFrom(
                 backgroundColor: buttonColor, shadowColor: buttonColor),
@@ -248,8 +256,8 @@ class MyHomePage extends StatelessWidget {
         "Starting getAnswerTextWidget in home_page_widgets ...");
     return Container(
       margin: const EdgeInsets.all(10.0),
-      child:
-      Text(question.answertext, style: Theme.of(context).textTheme.bodyLarge),
+      child: Text(question.answertext,
+          style: Theme.of(context).textTheme.bodyLarge),
     );
   }
 

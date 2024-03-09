@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../config/session_data.dart';
 import '../providers/locale_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 import 'home_page.dart';
 
 class QuestionFormApp extends StatelessWidget {
@@ -36,7 +36,7 @@ class QuestionFormApp extends StatelessWidget {
               labelLarge: TextStyle(fontSize: GameConfig.fontSize),
             ),
           ),
-          home: MyHomePage(),
+          home: const MyHomePage(),
         ),
       ),
     );
