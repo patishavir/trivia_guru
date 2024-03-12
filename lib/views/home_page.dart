@@ -69,9 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
         "Starting getWidgetList in home_page ... gameState: $_gameState");
     List<Widget> widgetList = [];
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
-    if (question.qimage != null && question.qimage!.isNotEmpty) {
-      widgetList.add(getQuestionImage());
-    }
+
     widgetList.add(
       getQuestionWidget(),
     );
@@ -83,10 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // add divider
     widgetList.add(getDivider());
-    // add answer text
-    if (_gameState == GameStateEnum.displayAnswer) {
-      widgetList.add(getAnswerTextWidget());
+    if (_gameState == GameStateEnum.displayQuestion && question.qimage != null && question.qimage!.isNotEmpty) {
+      widgetList.add(getQuestionImage(question.qimage ));
     }
+    // add answer text, image
+    if (_gameState == GameStateEnum.displayAnswer) {
+      if (question.aimage != null && question.aimage!.isNotEmpty) {
+        widgetList.add(getQuestionImage(question.aimage ));
+      }
+      widgetList.add(getAnswerTextWidget());
+      }
     return widgetList;
   }
 
@@ -124,13 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  Widget getQuestionImage() {
+  Widget getQuestionImage(String imageName) {
     return Center(
       child: SizedBox(
         width: 200.0,
         height: 200.0,
         child:
-            Image.asset('assets/images/${question.qimage}', fit: BoxFit.fill),
+            Image.asset('${GameConfig.imagesFolderFilePath}/$imageName', fit: BoxFit.fill),
       ),
     );
   }

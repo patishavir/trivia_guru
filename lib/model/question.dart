@@ -4,8 +4,8 @@ import '../common/logging_utils.dart';
 
 class Question {
   String question;
-  String? qimage;
-  String? aimage;
+  String qimage;
+  String aimage;
   int correctanswerindex = 0;
   String answertext;
   int difficultylevel;
