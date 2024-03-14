@@ -81,16 +81,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // add divider
     widgetList.add(getDivider());
-    if (_gameState == GameStateEnum.displayQuestion && question.qimage != null && question.qimage!.isNotEmpty) {
-      widgetList.add(getQuestionImage(question.qimage ));
+    if (_gameState == GameStateEnum.displayQuestion &&
+        question.qimage != null &&
+        question.qimage!.isNotEmpty) {
+      widgetList.add(getQuestionImage(question.qimage));
     }
     // add answer text, image
     if (_gameState == GameStateEnum.displayAnswer) {
       if (question.aimage != null && question.aimage!.isNotEmpty) {
-        widgetList.add(getQuestionImage(question.aimage ));
+        widgetList.add(getQuestionImage(question.aimage));
       }
       widgetList.add(getAnswerTextWidget());
-      }
+    }
     return widgetList;
   }
 
@@ -124,7 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       _setGameState(GameStateEnum.displayQuestion);
       SessionData.selectedAnswer = 0;
-
     }
   }
 
@@ -133,8 +134,8 @@ class _MyHomePageState extends State<MyHomePage> {
       child: SizedBox(
         width: 200.0,
         height: 200.0,
-        child:
-            Image.asset('${GameConfig.imagesFolderFilePath}/$imageName', fit: BoxFit.fill),
+        child: Image.asset('${GameConfig.imagesFolderFilePath}/$imageName',
+            fit: BoxFit.fill),
       ),
     );
   }

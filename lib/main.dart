@@ -26,8 +26,8 @@ class RouteSplashState extends State<RouteSplash> {
       (String jsonString) {
         QuestionsUtils.jsonString = jsonString;
         QuestionsUtils.buildQuestionListFromJsonString();
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const QuestionFormApp()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const QuestionFormApp()));
       },
     ); //running initialisation code; getting prefs etc.
   }

@@ -25,6 +25,7 @@ class ConfettiPageState extends State<ConfettiPage> {
     setState(() {
       initController();
       stopController();
+      LoggingUtils.writeLog("setState method call has completed");
     });
   }
 
@@ -32,7 +33,7 @@ class ConfettiPageState extends State<ConfettiPage> {
   void dispose() {
     super.dispose();
     confettiController.dispose();
-    LoggingUtils.writeLog("dispose method has completed");
+    LoggingUtils.writeLog("confettiController dispose method has completed");
   }
 
   @override
@@ -53,8 +54,9 @@ class ConfettiPageState extends State<ConfettiPage> {
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
               child: BlinkText(
-               // 'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
-                AppLocalizations.of(context)!.summary_line(Score.correctAnswers, GameConfig.questionsPerGame),
+                // 'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
+                AppLocalizations.of(context)!.summary_line(
+                    Score.correctAnswers, GameConfig.questionsPerGame),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
@@ -102,8 +104,29 @@ class ConfettiPageState extends State<ConfettiPage> {
     return Future.delayed(
         const Duration(seconds: GameConfig.confettiAnimationDuration), () {
       confettiController.stop();
-      LoggingUtils.writeLog('controller has stopped');
-      Navigator.of(context).pop();
+ //     Navigator.of(context).pop();
+      showAlertDialog();
+      LoggingUtils.writeLog('confettiController has stopped ...');
     });
   }
+
+  void showAlertDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+  AlertDialog alert = AlertDialog(
+    title: const Text("New game or quit?"),
+    titleTextStyle: const TextStyle(
+        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+    actionsOverflowButtonSpacing: 20,
+    actions: [
+      ElevatedButton(onPressed: () {}, child: const Text("New game !")),
+      ElevatedButton(onPressed: () {}, child: const Text("Quit !")),
+    ],
+    content: const Text("New game or quit?"),
+  );
 }
