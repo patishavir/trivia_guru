@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:math';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
