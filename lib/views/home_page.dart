@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../model/score.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -6,24 +7,30 @@ import '../config/session_data.dart';
 import '../model/question.dart';
 import '../views/confetti_page.dart';
 import '../utils/questions_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/languages.dart';
 
 enum GameStateEnum { displayQuestion, displayAnswer, clickNextButton, gameOver }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   @override
   late BuildContext context;
   late Question question;
 
   bool isCorrectAnswer = false;
   var _gameState = GameStateEnum.displayQuestion;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   void _setGameState(GameStateEnum gameState) {
     setState(() {
       _gameState = gameState;
@@ -43,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           // title: Text(widget.title),
           title: Text(
-            AppLocalizations.of(context)!.app_title,
+            "app_title".tr,
           ),
           centerTitle: true,
         ),
@@ -166,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
       children: [
         _gameState == GameStateEnum.displayQuestion
             ? Text(
-                AppLocalizations.of(context)!.select_an_answer,
+                "select_an_answer".tr,
                 style: const TextStyle(
                   fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
@@ -180,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       MaterialStatePropertyAll<Color>(Colors.white),
                 ),
                 child: Text(
-                  '${AppLocalizations.of(context)!.next_question} >',
+                  "${"next_question".tr} >",
                   style: const TextStyle(
                       fontSize: GameConfig.fontSize,
                       fontWeight: FontWeight.bold,
@@ -191,7 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
         const Spacer(),
-        Text('${AppLocalizations.of(context)!.score}: ',
+        Text("score".tr,
             style: Theme.of(context).textTheme.bodyLarge),
         Text(
           Score.correctAnswers.toString(),

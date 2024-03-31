@@ -11,9 +11,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  intl: any
 
   cupertino_icons: ^1.0.6
   logging: ^1.1.0
@@ -21,9 +18,9 @@ dependencies:
   build_web_compilers: ^4.0.9
   confetti: ^0.7.0
   blinking_text: ^1.0.2
-  path_provider: ^2.0.13
+  path_provider: ^2.1.2
   path: ^1.8.3
-  provider:
+  get: ^4.6.6
 
 dev_dependencies:
   flutter_test:

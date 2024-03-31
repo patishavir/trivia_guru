@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
 
-class LocaleProvider extends ChangeNotifier {
+class LocaleProvider  {
   static const Locale hebrewLocale = Locale ("he");
   static const Locale englishLocale = Locale ("en");
   Locale? _locale = hebrewLocale;
@@ -15,6 +15,5 @@ class LocaleProvider extends ChangeNotifier {
 
    set setLocale(Locale locale) {
     _locale = locale;
-    notifyListeners();
   }
 }

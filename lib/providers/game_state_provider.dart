@@ -3,7 +3,7 @@ import '../common/logging_utils.dart';
 
 enum GameStateEnum { displayQuestion, displayAnswer, clickNextButton, gameOver }
 
-class GameStateProvider extends ChangeNotifier {
+class GameStateProvider {
   var _gameState = GameStateEnum.displayQuestion;
 
   GameStateEnum get gameState {
@@ -13,7 +13,6 @@ class GameStateProvider extends ChangeNotifier {
 
   void setGameState (GameStateEnum gameStateParam) {
     _gameState = gameStateParam;
-    notifyListeners();
     LoggingUtils.writeLog("set _gameState to $gameStateParam  notifyListeners has been called !");
   }
 }

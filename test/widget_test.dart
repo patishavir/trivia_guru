@@ -7,12 +7,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:trivia_guru/views/question_form.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const QuestionFormApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

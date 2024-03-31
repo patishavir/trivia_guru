@@ -1,12 +1,13 @@
-import 'dart:html';
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/material.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../l10n/languages.dart';
+
+import 'home_page.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -54,16 +55,15 @@ class ConfettiPageState extends State<ConfettiPage> {
               margin: const EdgeInsets.only(top: 100.0),
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
-              child: BlinkText(
-                // 'You have answered correctly\n${SessionData.correctAnswers} out of ${GameConfig.questionsPerGame} questions ! ',
-                AppLocalizations.of(context)!.summary_line(
-                    Score.correctAnswers, GameConfig.questionsPerGame),
+              child: const BlinkText(
+                //    "${summary_line.trParams({correctAnswers: Score.correctAnswers, questionsPerGame: GameConfig.questionsPerGame})",
+                "you are great",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: GameConfig.fontSize),
+                style: TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
                 endColor: Colors.white,
                 times: 200,
-                duration: const Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 500),
               ),
             ),
             buildConfettiWidget(confettiController, pi / 1),
@@ -105,7 +105,7 @@ class ConfettiPageState extends State<ConfettiPage> {
     return Future.delayed(
         const Duration(seconds: GameConfig.confettiAnimationDuration), () {
       confettiController.stop();
- //     Navigator.of(context).pop();
+      //     Navigator.of(context).pop();
       showAlertDialog();
       LoggingUtils.writeLog('confettiController has stopped ...');
     });
@@ -115,19 +115,27 @@ class ConfettiPageState extends State<ConfettiPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return AlertDialog(
+          title: const Text("New game or quit?"),
+          titleTextStyle: const TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
+          actionsOverflowButtonSpacing: 20,
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const HomePage(),
+                    ),
+                  );
+                },
+                child: const Text("New game !")),
+            ElevatedButton(onPressed: () {}, child: const Text("Quit !")),
+          ],
+          content: const Text("New game or quit?"),
+        );
+        ;
       },
     );
   }
-  AlertDialog alert = AlertDialog(
-    title: const Text("New game or quit?"),
-    titleTextStyle: const TextStyle(
-        fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
-    actionsOverflowButtonSpacing: 20,
-    actions: [
-      ElevatedButton(onPressed: () {}, child: const Text("New game !")),
-      ElevatedButton(onPressed: () {}, child: const Text("Quit !")),
-    ],
-    content: const Text("New game or quit?"),
-  );
 }
