@@ -16,8 +16,10 @@ void main() {
   runApp(
     GetMaterialApp(
       translations: Languages(),
-      locale: Get.deviceLocale,
-      // locale: GameConfig.defaultLocale,
+      // locale: Get.deviceLocale,
+      locale: GameConfig.hebrewIlLocale,
+      // locale: GameConfig.englishUsLocale,
+      // locale: const Locale ("en"),
       // fallbackLocale:  GameConfig.fallbackLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
@@ -45,7 +47,6 @@ class RouteSplashState extends State<RouteSplash> {
   @override
   void initState() {
     super.initState();
-    SessionData.initSessionData();
     rootBundle.loadString(GameConfig.questionsFilePath).then(
       (String jsonString) {
         QuestionsUtils.jsonString = jsonString;

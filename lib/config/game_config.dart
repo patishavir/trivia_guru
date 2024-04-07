@@ -10,7 +10,7 @@ class GameConfig {
   static int questionsPerGame = QuestionsUtils.questionsList.length;
   static const int confettiAnimationDuration = 3;
   static const TextDirection textDirection = TextDirection.rtl;
-  static const Locale hebrewLocale = Locale('he', 'IL');
+  static const Locale hebrewIlLocale = Locale('he', 'IL');
   static const Locale englishUsLocale = Locale('en', 'US');
   static const Locale defaultLocale = Locale('he', 'IL');
   static const Locale fallbackLocale = Locale('en', 'US');

@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
+import 'package:get/get.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
@@ -55,15 +56,14 @@ class ConfettiPageState extends State<ConfettiPage> {
               margin: const EdgeInsets.only(top: 100.0),
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
-              child: const BlinkText(
-                //    "${summary_line.trParams({correctAnswers: Score.correctAnswers, questionsPerGame: GameConfig.questionsPerGame})",
-                "you are great",
+              child:  BlinkText(
+                    "summary_line".trParams({'correctAnswers' : '${Score.correctAnswers}', 'questionsPerGame' : '${GameConfig.questionsPerGame}'}),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: GameConfig.fontSize),
+                style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
                 endColor: Colors.white,
                 times: 200,
-                duration: Duration(milliseconds: 500),
+                duration: const Duration(milliseconds: 500),
               ),
             ),
             buildConfettiWidget(confettiController, pi / 1),
@@ -116,7 +116,7 @@ class ConfettiPageState extends State<ConfettiPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("New game or quit?"),
+          title:  Text("new_game_or_quit".tr),
           titleTextStyle: const TextStyle(
               fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
           actionsOverflowButtonSpacing: 20,
@@ -129,12 +129,11 @@ class ConfettiPageState extends State<ConfettiPage> {
                     ),
                   );
                 },
-                child: const Text("New game !")),
-            ElevatedButton(onPressed: () {}, child: const Text("Quit !")),
+                child:  Text("new_game".tr)),
+            ElevatedButton(onPressed: () {}, child:  Text("quit".tr)),
           ],
-          content: const Text("New game or quit?"),
+          content: Text("new_game_or_quit".tr),
         );
-        ;
       },
     );
   }

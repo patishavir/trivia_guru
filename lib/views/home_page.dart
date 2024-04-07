@@ -89,13 +89,12 @@ class _HomePageState extends State<HomePage> {
     // add divider
     widgetList.add(getDivider());
     if (_gameState == GameStateEnum.displayQuestion &&
-        question.qimage != null &&
         question.qimage!.isNotEmpty) {
       widgetList.add(getQuestionImage(question.qimage));
     }
     // add answer text, image
     if (_gameState == GameStateEnum.displayAnswer) {
-      if (question.aimage != null && question.aimage!.isNotEmpty) {
+      if (question.aimage!.isNotEmpty) {
         widgetList.add(getQuestionImage(question.aimage));
       }
       widgetList.add(getAnswerTextWidget());

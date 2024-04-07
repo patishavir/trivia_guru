@@ -11,6 +11,8 @@ class Languages extends Translations {
               "You have answered correctly @correctAnswers out of @questionsPerGame questions !",
           "next_question": "Next question",
           "new_game_or_quit": "New game or quit ?",
+          "quit": "Quit !",
+          "new_game" : "New game"
         },
         'he_IL': {
           "select_an_answer": "בחר תשובה",
@@ -20,6 +22,8 @@ class Languages extends Translations {
               "ענית נכון על correctAnswers@ מתוך questionsPerGame@ שאלות !",
           "next_question": "השאלה הבאה",
           "new_game_or_quit": "שחק שוב או שנעצור ?",
+          "quit": "מספיק ודי",
+          "new_game": "משחק חדש",
         },
       };
 }
