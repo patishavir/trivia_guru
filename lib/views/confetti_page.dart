@@ -4,6 +4,7 @@ import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:get/get.dart';
 import 'package:trivia_guru/config/session_data.dart';
+import 'package:trivia_guru/model/SchoreHistory.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
@@ -99,7 +100,7 @@ class ConfettiPageState extends State<ConfettiPage> {
 
   void initController() {
     confettiController =
-        ConfettiController(duration: const Duration(seconds: 60));
+        ConfettiController(duration: const Duration(seconds: 6));
   }
 
   Future<void> stopController() {
@@ -124,11 +125,17 @@ class ConfettiPageState extends State<ConfettiPage> {
           actions: [
             ElevatedButton(
                 onPressed: () {
+                  ScoreHistory scoreHistory = ScoreHistory(Score.correctAnswers, Score.wrongAnswers, GameConfig.questionsPerGame, DateTime.now().millisecondsSinceEpoch);
+                  Score.addToHistory (scoreHistory);
+                  Score.resetCorrectAnswers();
+                  Score.resetWrongAnswers();
                   SessionData.initSessionData();
-                  Get.off(() => const HomePage());
+                  Get.offAllNamed('/homePage');
                 },
                 child:  Text("new_game".tr)),
-            ElevatedButton(onPressed: () {}, child:  Text("quit".tr)),
+            ElevatedButton(onPressed: () {
+              Get.offAllNamed('/gameOver');
+            }, child:  Text("quit".tr)),
           ],
           content: Text("new_game_or_quit".tr),
         );

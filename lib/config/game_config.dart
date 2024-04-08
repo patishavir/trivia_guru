@@ -14,6 +14,6 @@ class GameConfig {
   static const Locale englishUsLocale = Locale('en', 'US');
   static const Locale defaultLocale = Locale('he', 'IL');
   static const Locale fallbackLocale = Locale('en', 'US');
-  static const String questionsFilePath ="assets/questions/q3.json";
+  static const String questionsFilePath ="assets/questions/q9.json";
   static const String imagesFolderFilePath ="assets/images";
 }

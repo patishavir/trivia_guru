@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
+import 'package:trivia_guru/views/game_over.dart';
 import './config/game_config.dart';
-import './config/session_data.dart';
 import './utils/questions_utils.dart';
 import './views/home_page.dart';
 import './views/confetti_page.dart';
@@ -10,8 +10,9 @@ import './l10n/languages.dart';
 
 void main() {
   final routes = [
-    GetPage(name: '/ConfettiPage', page: () => const ConfettiPage()),
-    GetPage(name: '/HomePage', page: () => const HomePage()),
+    GetPage(name: '/confettiPage', page: () => const ConfettiPage()),
+    GetPage(name: '/homePage', page: () => const HomePage()),
+    GetPage(name: '/gameOver', page: () => const GameOver()),
   ];
   runApp(
     GetMaterialApp(

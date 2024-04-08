@@ -1,3 +1,5 @@
+import 'package:trivia_guru/model/SchoreHistory.dart';
+
 import '../common/logging_utils.dart';
 
 class Score {
@@ -6,6 +8,8 @@ class Score {
 
   static int get correctAnswers => _correctAnswers;
   static int get wrongAnswers => _wrongAnswers;
+
+  static final List<ScoreHistory> _scoreHistoryList = [];
 
   static void incrementCorrectAnswers() {
     _correctAnswers++;
@@ -25,5 +29,8 @@ class Score {
   static void resetWrongAnswers() {
     _wrongAnswers = 0;
     LoggingUtils.writeLog("_wrongAnswers has been reset to $_wrongAnswers !");
+  }
+  static void addToHistory ( ScoreHistory scoreHistory) {
+    _scoreHistoryList.add(scoreHistory);
   }
 }

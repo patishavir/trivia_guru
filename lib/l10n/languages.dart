@@ -12,7 +12,8 @@ class Languages extends Translations {
           "next_question": "Next question",
           "new_game_or_quit": "New game or quit ?",
           "quit": "Quit !",
-          "new_game" : "New game"
+          "new_game" : "New game",
+          "game_over": "The game is over !",
         },
         'he_IL': {
           "select_an_answer": "בחר תשובה",
@@ -24,6 +25,7 @@ class Languages extends Translations {
           "new_game_or_quit": "שחק שוב או שנעצור ?",
           "quit": "מספיק ודי",
           "new_game": "משחק חדש",
+          "game_over": "המשחק נגמר !",
         },
       };
 }

@@ -124,11 +124,7 @@ class _HomePageState extends State<HomePage> {
     LoggingUtils.writeLog(
         "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
     if ((SessionData.currentQuestionIndex) >= GameConfig.questionsPerGame) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const ConfettiPage(),
-        ),
-      );
+      Get.offAllNamed('/confettiPage');
     } else {
       _setGameState(GameStateEnum.displayQuestion);
       SessionData.selectedAnswer = 0;

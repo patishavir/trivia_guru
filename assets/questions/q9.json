@@ -1,7 +1,7 @@
 [
   {
     "question":"איזו קבוצה זכתה הכי הרבה פעמים בגביע המדינה בכדורגל",
-    "qimage":"zehavi.jpg",
+    "qimage":"trophy.jpg",
     "correctanswerindex":3,
     "answertext":"מכבי תל אביב זכתה בגביע המדינה בכדור רגל 18 פעמים. יותר מכל קבוצה אחרת",
     "answer1":"הפועל תל אביב",
@@ -14,17 +14,17 @@
     "timestamp":"2023-11-20 20:44:001+0200",
     "category":"sport",
     "qid":5858509,
-    "aimage":"null"
+    "aimage":"maccabiTlvFc.jpg"
   },
   {
     "question":"מתי נוסדה בישראל הליגה לכדורגל",
     "qimage":"",
     "correctanswerindex":2,
     "answertext":"הליגה לכדורגל נוסדה בתקופת המנדט הבריטי בשנת 1931",
-    "answer1":"בסוף שנות העשרים של המאה העשרים",
-    "answer2":"בתחילת שנות השלושים",
-    "answer3":"בסוף שנות השלושים",
-    "answer4":"בתחילת שנות הארבעים",
+    "answer1":"בין השנים 1925-1930",
+    "answer2":"בין השנים 1931-1935",
+    "answer3":"בין השנים 1936-1940",
+    "answer4":"בין השנים 1941-1945",
     "difficultylevel":5,
     "subject":"israeli-soccer",
     "language":"HE",
@@ -36,7 +36,7 @@
   {
     "question":"היכן משחק עומר אצילי בעונה 2023-24",
     "qimage":"",
-    "correctanswerindex":3,
+    "correctanswerindex":4,
     "answertext":"עומר אצילי משחק בעונה 2023-24 באל עין מליגת העל באיחוד האמירויות",
     "answer1":"קפריסין",
     "answer2":"ספרד",
@@ -48,7 +48,7 @@
     "timestamp":"2023-11-20 20:52:043+0200",
     "category":"sport",
     "qid":6380938,
-    "aimage":""
+    "aimage":"OmerAtzili.jpg"
   },
   {
     "question":"איזה קבוצה זכתה הכי הרבה פעמים באליפות הליגה בכדורגל",
