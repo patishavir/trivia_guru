@@ -6,6 +6,7 @@ class SessionData {
 
   static void initSessionData() {
     selectedAnswer = 0;
+    _currentQuestionIndex = 0;
   }
 
   static int get currentQuestionIndex => _currentQuestionIndex;

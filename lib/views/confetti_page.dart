@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:get/get.dart';
+import 'package:trivia_guru/config/session_data.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
@@ -123,11 +124,8 @@ class ConfettiPageState extends State<ConfettiPage> {
           actions: [
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ),
-                  );
+                  SessionData.initSessionData();
+                  Get.off(() => const HomePage());
                 },
                 child:  Text("new_game".tr)),
             ElevatedButton(onPressed: () {}, child:  Text("quit".tr)),

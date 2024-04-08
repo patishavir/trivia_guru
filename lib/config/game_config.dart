@@ -7,7 +7,7 @@ class GameConfig {
   static const double fontSize = 20.0;
   // static const String fontFamily = "NovaSlim";
   static const String fontFamily = "gadi-almog";
-  static int questionsPerGame = QuestionsUtils.questionsList.length;
+  static const int questionsPerGame = 2;
   static const int confettiAnimationDuration = 3;
   static const TextDirection textDirection = TextDirection.rtl;
   static const Locale hebrewIlLocale = Locale('he', 'IL');
