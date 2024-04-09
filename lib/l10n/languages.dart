@@ -14,6 +14,7 @@ class Languages extends Translations {
           "quit": "Quit !",
           "new_game" : "New game",
           "game_over": "The game is over !",
+          "out_of_questions": "We have run out of questions\nThe game is over !",
         },
         'he_IL': {
           "select_an_answer": "בחר תשובה",
@@ -26,6 +27,7 @@ class Languages extends Translations {
           "quit": "מספיק ודי",
           "new_game": "משחק חדש",
           "game_over": "המשחק נגמר !",
+          "out_of_questions": "נגמרו לנו השאלות\nהמשחק נגמר !",
         },
       };
 }

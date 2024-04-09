@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import '../model/score.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
-import '../config/session_data.dart';
+import '../model/session_data.dart';
 import '../model/question.dart';
 import '../views/confetti_page.dart';
 import '../utils/questions_utils.dart';
@@ -123,8 +123,11 @@ class _HomePageState extends State<HomePage> {
     SessionData.incrementCurrentQuestionIndex();
     LoggingUtils.writeLog(
         "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
-    if ((SessionData.currentQuestionIndex) >= GameConfig.questionsPerGame) {
+    if ((SessionData.currentGameQuestionIndex) >= GameConfig.questionsPerGame) {
       Get.offAllNamed('/confettiPage');
+    } else if ((SessionData.currentQuestionIndex) >=
+        GameConfig.questionsPerGame) {
+      Get.offAllNamed('/outOfQuestions');
     } else {
       _setGameState(GameStateEnum.displayQuestion);
       SessionData.selectedAnswer = 0;
@@ -193,8 +196,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
         const Spacer(),
-        Text("score".tr,
-            style: Theme.of(context).textTheme.bodyLarge),
+        Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
         Text(
           Score.correctAnswers.toString(),
           style: const TextStyle(

@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:get/get.dart';
-import 'package:trivia_guru/config/session_data.dart';
+import 'package:trivia_guru/model/session_data.dart';
 import 'package:trivia_guru/model/SchoreHistory.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
-import '../l10n/languages.dart';
-
-import 'home_page.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -100,7 +97,7 @@ class ConfettiPageState extends State<ConfettiPage> {
 
   void initController() {
     confettiController =
-        ConfettiController(duration: const Duration(seconds: 6));
+        ConfettiController(duration: const Duration(seconds: 3));
   }
 
   Future<void> stopController() {

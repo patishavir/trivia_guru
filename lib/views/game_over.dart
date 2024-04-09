@@ -3,32 +3,39 @@ import 'package:blinking_text/blinking_text.dart';
 import 'package:get/get.dart';
 
 class GameOver extends StatelessWidget {
-  const GameOver({super.key});
+  String myText;
+  GameOver({super.key, required this.myText});
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     TextStyle ts = const TextStyle(
-        fontFamily: 'Code128',
-        fontSize: 90.0,
-        backgroundColor: Colors.lightBlue,
-        color: Colors.pinkAccent,
+      fontFamily: 'Code128',
+      fontSize: 90.0,
+      backgroundColor: Colors.lightBlue,
+      color: Colors.pinkAccent,
     );
     return Scaffold(
       body: Center(
         child: SizedBox(
           width: double.infinity,
           child: Container(
-            color: Colors.lightBlueAccent,
-            child: Align(
-                alignment: Alignment.center,
-              child: BlinkText(
-                  'game_over'.tr,
-                  style: const TextStyle(fontSize: 90.0, color: Colors.redAccent),
-                  beginColor: Colors.black,
-                  endColor: Colors.orange,
-                  times: 10,
-                  duration: const Duration(seconds: 1)
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.red),
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.grey,
+            ),
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: BlinkText(myText.tr,
+                    style:  TextStyle( fontSize:  MediaQuery.of(context).size.width/10,
+                        fontWeight: FontWeight.bold, color: Colors.redAccent),
+                    beginColor: Colors.blue.shade900,
+                    endColor: Colors.orange,
+                    times: 5,
+                    duration: const Duration(seconds: 1)),
               ),
             ),
           ),

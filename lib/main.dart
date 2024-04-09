@@ -12,7 +12,8 @@ void main() {
   final routes = [
     GetPage(name: '/confettiPage', page: () => const ConfettiPage()),
     GetPage(name: '/homePage', page: () => const HomePage()),
-    GetPage(name: '/gameOver', page: () => const GameOver()),
+    GetPage(name: '/gameOver', page: () =>  GameOver(myText: 'game_over')),
+    GetPage(name: '/outOfQuestions', page: () =>  GameOver(myText: 'out_of_questions')),
   ];
   runApp(
     GetMaterialApp(
