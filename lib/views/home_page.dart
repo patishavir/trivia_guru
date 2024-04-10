@@ -5,64 +5,47 @@ import '../common/logging_utils.dart';
 import '../config/game_config.dart';
 import '../model/session_data.dart';
 import '../model/question.dart';
-import '../views/confetti_page.dart';
 import '../utils/questions_utils.dart';
-import '../l10n/languages.dart';
+import '../controllers/game_state_controller.dart';
 
-enum GameStateEnum { displayQuestion, displayAnswer, clickNextButton, gameOver }
+class HomePage extends StatelessWidget {
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   late BuildContext context;
   late Question question;
-
   bool isCorrectAnswer = false;
-  var _gameState = GameStateEnum.displayQuestion;
+  final GameStateController gameStateController = Get.put(GameStateController());
+  HomePage({super.key});
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _setGameState(GameStateEnum gameState) {
-    setState(() {
-      _gameState = gameState;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     LoggingUtils.writeLog("Start building MyHomePage ...");
     this.context = context;
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.red, width: 1.0),
-      ),
-      constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
-      child: Scaffold(
-        appBar: AppBar(
-          // title: Text(widget.title),
-          title: Text(
-            "app_title".tr,
-          ),
-          centerTitle: true,
+    gameStateController.setGameState(GameStateEnum.displayQuestion);
+    return Obx(
+      () => Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.red, width: 1.0),
         ),
-        body: Center(
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: getWidgetList(),
+        constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
+        child: Scaffold(
+          appBar: AppBar(
+            // title: Text(widget.title),
+            title: Text(
+              "app_title".tr,
+            ),
+            centerTitle: true,
+          ),
+          body: Center(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: getWidgetList(),
+                ),
               ),
             ),
           ),
@@ -73,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> getWidgetList() {
     LoggingUtils.writeLog(
-        "Starting getWidgetList in home_page ... gameState: $_gameState");
+        "Starting getWidgetList in home_page ... gameState: ${gameStateController.gameState}");
     List<Widget> widgetList = [];
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
 
@@ -88,12 +71,12 @@ class _HomePageState extends State<HomePage> {
 
     // add divider
     widgetList.add(getDivider());
-    if (_gameState == GameStateEnum.displayQuestion &&
+    if (gameStateController.gameState == GameStateEnum.displayQuestion &&
         question.qimage!.isNotEmpty) {
       widgetList.add(getQuestionImage(question.qimage));
     }
     // add answer text, image
-    if (_gameState == GameStateEnum.displayAnswer) {
+    if (gameStateController.gameState == GameStateEnum.displayAnswer) {
       if (question.aimage!.isNotEmpty) {
         widgetList.add(getQuestionImage(question.aimage));
       }
@@ -116,7 +99,7 @@ class _HomePageState extends State<HomePage> {
     }
     LoggingUtils.writeLog(
         'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    _setGameState(GameStateEnum.displayQuestion);
+    gameStateController.setGameState(GameStateEnum.displayQuestion);
   }
 
   void processNextQuestionButtonPress() {
@@ -129,7 +112,7 @@ class _HomePageState extends State<HomePage> {
         GameConfig.questionsPerGame) {
       Get.offAllNamed('/outOfQuestions');
     } else {
-      _setGameState(GameStateEnum.displayQuestion);
+      gameStateController.setGameState(GameStateEnum.displayQuestion);
       SessionData.selectedAnswer = 0;
     }
   }
@@ -169,7 +152,7 @@ class _HomePageState extends State<HomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _gameState == GameStateEnum.displayQuestion
+        gameStateController.gameState == GameStateEnum.displayQuestion
             ? Text(
                 "select_an_answer".tr,
                 style: const TextStyle(
@@ -239,11 +222,11 @@ class _HomePageState extends State<HomePage> {
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: (_gameState == GameStateEnum.displayQuestion)
+            onPressed: (gameStateController.gameState == GameStateEnum.displayQuestion)
                 ? () {
                     LoggingUtils.writeLog("inside answerButton onPressed");
                     processAnswerButtonClick(i);
-                    _setGameState(GameStateEnum.displayAnswer);
+                    gameStateController.setGameState(GameStateEnum.displayAnswer);
                   }
                 : null,
             style: TextButton.styleFrom(

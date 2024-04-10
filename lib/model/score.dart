@@ -1,4 +1,4 @@
-import 'package:trivia_guru/model/SchoreHistory.dart';
+import 'package:trivia_guru/model/ScoreHistory.dart';
 
 import '../common/logging_utils.dart';
 

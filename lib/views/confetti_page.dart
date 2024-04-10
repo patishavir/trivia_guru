@@ -4,7 +4,7 @@ import 'package:blinking_text/blinking_text.dart';
 import 'package:confetti/confetti.dart';
 import 'package:get/get.dart';
 import 'package:trivia_guru/model/session_data.dart';
-import 'package:trivia_guru/model/SchoreHistory.dart';
+import 'package:trivia_guru/model/ScoreHistory.dart';
 import '../model/score.dart';
 import '../config/game_config.dart';
 import '../common/logging_utils.dart';
@@ -41,6 +41,14 @@ class ConfettiPageState extends State<ConfettiPage> {
   @override
   Widget build(BuildContext context) {
     LoggingUtils.writeLog("start building ConfettiPageState ...");
+    String summaryLine = "summary_line".trParams({
+      'correctAnswers': '${Score.correctAnswers}',
+      'questionsPerGame': '${GameConfig.questionsPerGame}'
+    });
+    summaryLine = summaryLine.replaceAll(
+        "questionsPerGame@", GameConfig.questionsPerGame.toString());
+    summaryLine = summaryLine.replaceAll(
+        "correctAnswers@", Score.correctAnswers.toString());
     return Scaffold(
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
@@ -55,8 +63,8 @@ class ConfettiPageState extends State<ConfettiPage> {
               margin: const EdgeInsets.only(top: 100.0),
               padding: const EdgeInsets.all(30.0),
               color: Colors.pink,
-              child:  BlinkText(
-                    "summary_line".trParams({'correctAnswers' : '${Score.correctAnswers}', 'questionsPerGame' : '${GameConfig.questionsPerGame}'}),
+              child: BlinkText(
+                summaryLine,
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: GameConfig.fontSize),
                 beginColor: Colors.yellowAccent,
@@ -115,24 +123,30 @@ class ConfettiPageState extends State<ConfettiPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:  Text("new_game_or_quit".tr),
+          title: Text("new_game_or_quit".tr),
           titleTextStyle: const TextStyle(
               fontWeight: FontWeight.bold, color: Colors.black, fontSize: 20),
           actionsOverflowButtonSpacing: 20,
           actions: [
             ElevatedButton(
                 onPressed: () {
-                  ScoreHistory scoreHistory = ScoreHistory(Score.correctAnswers, Score.wrongAnswers, GameConfig.questionsPerGame, DateTime.now().millisecondsSinceEpoch);
-                  Score.addToHistory (scoreHistory);
+                  ScoreHistory scoreHistory = ScoreHistory(
+                      Score.correctAnswers,
+                      Score.wrongAnswers,
+                      GameConfig.questionsPerGame,
+                      DateTime.now().millisecondsSinceEpoch);
+                  Score.addToHistory(scoreHistory);
                   Score.resetCorrectAnswers();
                   Score.resetWrongAnswers();
                   SessionData.initSessionData();
                   Get.offAllNamed('/homePage');
                 },
-                child:  Text("new_game".tr)),
-            ElevatedButton(onPressed: () {
-              Get.offAllNamed('/gameOver');
-            }, child:  Text("quit".tr)),
+                child: Text("new_game".tr)),
+            ElevatedButton(
+                onPressed: () {
+                  Get.offAllNamed('/gameOver');
+                },
+                child: Text("quit".tr)),
           ],
           content: Text("new_game_or_quit".tr),
         );
