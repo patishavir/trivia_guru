@@ -49,7 +49,7 @@ class RouteSplashState extends State<RouteSplash> {
       (String jsonString) {
         QuestionsUtils.jsonString = jsonString;
         QuestionsUtils.buildQuestionListFromJsonString();
-        Get.off(() => HomePage());
+        Get.offAllNamed('/homePage');
       },
     ); //running initialisation code; getting prefs etc.
   }

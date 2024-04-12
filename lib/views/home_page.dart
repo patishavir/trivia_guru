@@ -67,7 +67,10 @@ class HomePage extends StatelessWidget {
     widgetList.add(
       getSelectAnAnswerRow(),
     );
-    widgetList.addAll(getAnswerButtons());
+    widgetList.add(getScoreWidget());
+    if (GameConfig.multipleChoiceQuestions) {
+      widgetList.addAll(getAnswerButtons());
+    }
 
     // add divider
     widgetList.add(getDivider());
@@ -178,27 +181,35 @@ class HomePage extends StatelessWidget {
                   processNextQuestionButtonPress();
                 },
               ),
-        const Spacer(),
-        Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
-        Text(
-          Score.correctAnswers.toString(),
-          style: const TextStyle(
-              fontSize: GameConfig.fontSize,
-              backgroundColor: Colors.green,
-              color: Colors.white),
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        Text(
-          Score.wrongAnswers.toString(),
-          style: const TextStyle(
-              fontSize: GameConfig.fontSize,
-              backgroundColor: Colors.red,
-              color: Colors.white),
-        ),
-        const Spacer(),
+
       ],
+    );
+  }
+
+  Widget getScoreWidget () {
+    return Row (
+        children: [
+      const Spacer(),
+      Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
+      Text(
+        Score.correctAnswers.toString(),
+        style: const TextStyle(
+            fontSize: GameConfig.fontSize,
+            backgroundColor: Colors.green,
+            color: Colors.white),
+      ),
+      const SizedBox(
+        width: 8,
+      ),
+      Text(
+        Score.wrongAnswers.toString(),
+        style: const TextStyle(
+            fontSize: GameConfig.fontSize,
+            backgroundColor: Colors.red,
+            color: Colors.white),
+      ),
+      const Spacer(),
+    ],
     );
   }
 

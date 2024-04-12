@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class GameConfig {
   static const bool writeLog = true;
+  static const bool multipleChoiceQuestions = false;
   static const int answersCount = 4;
   static const double fontSize = 20.0;
   static const String hebFontFamily = "gadi-almog";
