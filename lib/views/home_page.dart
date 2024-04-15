@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../model/score.dart';
 import '../common/logging_utils.dart';
 import '../config/game_config.dart';
@@ -9,13 +10,13 @@ import '../utils/questions_utils.dart';
 import '../controllers/game_state_controller.dart';
 
 class HomePage extends StatelessWidget {
-
   late BuildContext context;
   late Question question;
   bool isCorrectAnswer = false;
-  final GameStateController gameStateController = Get.put(GameStateController());
-  HomePage({super.key});
+  final GameStateController gameStateController =
+      Get.put(GameStateController());
 
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +32,13 @@ class HomePage extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(
             // title: Text(widget.title),
+            // title: Text(
+            //   "app_title".tr,
+            // ),
             title: Text(
               "app_title".tr,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.red),
             ),
             centerTitle: true,
           ),
@@ -58,7 +64,13 @@ class HomePage extends StatelessWidget {
     LoggingUtils.writeLog(
         "Starting getWidgetList in home_page ... gameState: ${gameStateController.gameState}");
     List<Widget> widgetList = [];
+    widgetList.add(getScoreRow());
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+
+    if (gameStateController.gameState == GameStateEnum.displayQuestion &&
+        question.qimage!.isNotEmpty) {
+      widgetList.add(getQuestionImage(question.qimage));
+    }
 
     widgetList.add(
       getQuestionWidget(),
@@ -67,17 +79,13 @@ class HomePage extends StatelessWidget {
     widgetList.add(
       getSelectAnAnswerRow(),
     );
-    widgetList.add(getScoreWidget());
+
     if (GameConfig.multipleChoiceQuestions) {
       widgetList.addAll(getAnswerButtons());
+    } else {
+      widgetList.add(getRightWrongAnswerButtons());
     }
 
-    // add divider
-    widgetList.add(getDivider());
-    if (gameStateController.gameState == GameStateEnum.displayQuestion &&
-        question.qimage!.isNotEmpty) {
-      widgetList.add(getQuestionImage(question.qimage));
-    }
     // add answer text, image
     if (gameStateController.gameState == GameStateEnum.displayAnswer) {
       if (question.aimage!.isNotEmpty) {
@@ -86,38 +94,6 @@ class HomePage extends StatelessWidget {
       widgetList.add(getAnswerTextWidget());
     }
     return widgetList;
-  }
-
-  void processAnswerButtonClick(int i) {
-    LoggingUtils.writeLog(
-        "Starting processAnswerButtonClick in home_page ... Button: $i");
-    SessionData.selectedAnswer = i + 1;
-    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
-    isCorrectAnswer =
-        (question.correctanswerindex == SessionData.selectedAnswer);
-    if (isCorrectAnswer) {
-      Score.incrementCorrectAnswers();
-    } else {
-      Score.incrementWrongAnswers();
-    }
-    LoggingUtils.writeLog(
-        'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
-    gameStateController.setGameState(GameStateEnum.displayQuestion);
-  }
-
-  void processNextQuestionButtonPress() {
-    SessionData.incrementCurrentQuestionIndex();
-    LoggingUtils.writeLog(
-        "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
-    if ((SessionData.currentGameQuestionIndex) >= GameConfig.questionsPerGame) {
-      Get.offAllNamed('/confettiPage');
-    } else if ((SessionData.currentQuestionIndex) >=
-        GameConfig.questionsPerGame) {
-      Get.offAllNamed('/outOfQuestions');
-    } else {
-      gameStateController.setGameState(GameStateEnum.displayQuestion);
-      SessionData.selectedAnswer = 0;
-    }
   }
 
   Widget getQuestionImage(String imageName) {
@@ -157,7 +133,9 @@ class HomePage extends StatelessWidget {
       children: [
         gameStateController.gameState == GameStateEnum.displayQuestion
             ? Text(
-                "select_an_answer".tr,
+                GameConfig.multipleChoiceQuestions
+                    ? "select_an_answer".tr
+                    : "grade_your_answer".tr,
                 style: const TextStyle(
                   fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
@@ -181,35 +159,34 @@ class HomePage extends StatelessWidget {
                   processNextQuestionButtonPress();
                 },
               ),
-
       ],
     );
   }
 
-  Widget getScoreWidget () {
-    return Row (
-        children: [
-      const Spacer(),
-      Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
-      Text(
-        Score.correctAnswers.toString(),
-        style: const TextStyle(
-            fontSize: GameConfig.fontSize,
-            backgroundColor: Colors.green,
-            color: Colors.white),
-      ),
-      const SizedBox(
-        width: 8,
-      ),
-      Text(
-        Score.wrongAnswers.toString(),
-        style: const TextStyle(
-            fontSize: GameConfig.fontSize,
-            backgroundColor: Colors.red,
-            color: Colors.white),
-      ),
-      const Spacer(),
-    ],
+  Row getScoreRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        //  const Spacer(),
+        Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
+        Text(
+          Score.correctAnswers.toString(),
+          style: const TextStyle(
+              fontSize: GameConfig.fontSize,
+              backgroundColor: Colors.green,
+              color: Colors.white),
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        Text(
+          Score.wrongAnswers.toString(),
+          style: const TextStyle(
+              fontSize: GameConfig.fontSize,
+              backgroundColor: Colors.red,
+              color: Colors.white),
+        ),
+      ],
     );
   }
 
@@ -233,13 +210,15 @@ class HomePage extends StatelessWidget {
         Container(
           margin: const EdgeInsets.all(10.0),
           child: TextButton(
-            onPressed: (gameStateController.gameState == GameStateEnum.displayQuestion)
-                ? () {
-                    LoggingUtils.writeLog("inside answerButton onPressed");
-                    processAnswerButtonClick(i);
-                    gameStateController.setGameState(GameStateEnum.displayAnswer);
-                  }
-                : null,
+            onPressed:
+                (gameStateController.gameState == GameStateEnum.displayQuestion)
+                    ? () {
+                        LoggingUtils.writeLog("inside answerButton onPressed");
+                        processAnswerButtonClick(i);
+                        gameStateController
+                            .setGameState(GameStateEnum.displayAnswer);
+                      }
+                    : null,
             style: TextButton.styleFrom(
                 backgroundColor: buttonColor, shadowColor: buttonColor),
             child: Text(
@@ -254,6 +233,36 @@ class HomePage extends StatelessWidget {
     return answerButtonList;
   }
 
+  Widget getRightWrongAnswerButtons() {
+    double iconWidth = MediaQuery.of(context).size.width / 20.0;
+    double iconHeight = iconWidth;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          onPressed: () => Score.incrementCorrectAnswers(),
+          icon: SvgPicture.asset(
+            "assets/icons/check_box.svg",
+            colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),
+            semanticsLabel: 'Correct answer',
+            width: iconWidth,
+            height: iconHeight,
+          ),
+        ),
+        IconButton(
+          onPressed: () => Score.incrementWrongAnswers(),
+          icon: SvgPicture.asset(
+            "assets/icons/close.svg",
+            colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
+            semanticsLabel: 'Wrong answer',
+            width: iconWidth,
+            height: iconHeight,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget getAnswerTextWidget() {
     LoggingUtils.writeLog(
         "Starting getAnswerTextWidget in home_page_widgets ...");
@@ -264,12 +273,35 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget getDivider() {
-    LoggingUtils.writeLog("Starting getDivider ...");
-    return const Divider(
-      color: Colors.red,
-      height: 5.0,
-      thickness: 2.0,
-    );
+  void processAnswerButtonClick(int i) {
+    LoggingUtils.writeLog(
+        "Starting processAnswerButtonClick in home_page ... Button: $i");
+    SessionData.selectedAnswer = i + 1;
+    question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
+    isCorrectAnswer =
+        (question.correctanswerindex == SessionData.selectedAnswer);
+    if (isCorrectAnswer) {
+      Score.incrementCorrectAnswers();
+    } else {
+      Score.incrementWrongAnswers();
+    }
+    LoggingUtils.writeLog(
+        'selected answer ${SessionData.selectedAnswer} is $isCorrectAnswer');
+    gameStateController.setGameState(GameStateEnum.displayQuestion);
+  }
+
+  void processNextQuestionButtonPress() {
+    SessionData.incrementCurrentQuestionIndex();
+    LoggingUtils.writeLog(
+        "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
+    if ((SessionData.currentGameQuestionIndex) >= GameConfig.questionsPerGame) {
+      Get.offAllNamed('/confettiPage');
+    } else if ((SessionData.currentQuestionIndex) >=
+        GameConfig.questionsPerGame) {
+      Get.offAllNamed('/outOfQuestions');
+    } else {
+      gameStateController.setGameState(GameStateEnum.displayQuestion);
+      SessionData.selectedAnswer = 0;
+    }
   }
 }

@@ -18,7 +18,7 @@ void main() {
   runApp(
    GetMaterialApp(
       translations: Languages(),
-      locale: GameConfig.currentLocale,
+      locale: GameConfig.hebrewIlLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
       title: "Trivia Guru",

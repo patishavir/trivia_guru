@@ -15,6 +15,7 @@ class Languages extends Translations {
           "new_game" : "New game",
           "game_over": "The game is over !",
           "out_of_questions": "We have run out of questions\nThe game is over !",
+          "grade_your_answer": "Grade your answer: (correct or wrong)",
         },
         'he_IL': {
           "select_an_answer": "בחר תשובה",
@@ -28,6 +29,7 @@ class Languages extends Translations {
           "new_game": "משחק חדש",
           "game_over": "המשחק נגמר !",
           "out_of_questions": "נגמרו לנו השאלות\nהמשחק נגמר !",
+          "grade_your_answer": "סמן את תשובתך: נכונה או שגויה",
         },
       };
 }

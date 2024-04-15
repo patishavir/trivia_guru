@@ -21,6 +21,7 @@ dependencies:
   path_provider: ^2.1.2
   path: ^1.8.3
   get: ^4.6.6
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -35,6 +36,7 @@ flutter:
   assets:
     - assets/questions/
     - assets/images/
+    - assets/icons/
   fonts:
     - family: NovaSlim
       fonts:
