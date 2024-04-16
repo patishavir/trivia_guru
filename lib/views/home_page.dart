@@ -77,21 +77,18 @@ class HomePage extends StatelessWidget {
     );
     // next question container
     widgetList.add(
-      getSelectAnAnswerRow(),
+      getSelectAnAnswerWidget(),
     );
 
     if (GameConfig.multipleChoiceQuestions) {
       widgetList.addAll(getAnswerButtons());
-    } else {
-      widgetList.add(getRightWrongAnswerButtons());
     }
-
     // add answer text, image
     if (gameStateController.gameState == GameStateEnum.displayAnswer) {
       if (question.aimage!.isNotEmpty) {
         widgetList.add(getQuestionImage(question.aimage));
       }
-      widgetList.add(getAnswerTextWidget());
+      widgetList.add(getAnswerTextWidget());      
     }
     return widgetList;
   }
@@ -125,7 +122,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget getSelectAnAnswerRow() {
+  Widget getSelectAnAnswerWidget() {
     LoggingUtils.writeLog(
         "Starting getSelectAnAnswerRow in home_page_widgets ...");
     return Row(
@@ -135,7 +132,7 @@ class HomePage extends StatelessWidget {
             ? Text(
                 GameConfig.multipleChoiceQuestions
                     ? "select_an_answer".tr
-                    : "grade_your_answer".tr,
+                    : "show_answer".tr,
                 style: const TextStyle(
                   fontSize: GameConfig.fontSize,
                   fontWeight: FontWeight.bold,
@@ -149,7 +146,7 @@ class HomePage extends StatelessWidget {
                       MaterialStatePropertyAll<Color>(Colors.white),
                 ),
                 child: Text(
-                  "${"next_question".tr} >",
+                 GameConfig.multipleChoiceQuestions ? "${"next_question".tr} >" : "grade_your_answer".tr,
                   style: const TextStyle(
                       fontSize: GameConfig.fontSize,
                       fontWeight: FontWeight.bold,
@@ -240,7 +237,10 @@ class HomePage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: () => Score.incrementCorrectAnswers(),
+          onPressed: () {
+            Score.incrementCorrectAnswers();
+            gameStateController.setGameState(GameStateEnum.displayAnswer);
+          },
           icon: SvgPicture.asset(
             "assets/icons/check_box.svg",
             colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),
@@ -250,7 +250,10 @@ class HomePage extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: () => Score.incrementWrongAnswers(),
+          onPressed: () {
+            Score.incrementWrongAnswers();
+            gameStateController.setGameState(GameStateEnum.displayAnswer);
+          },
           icon: SvgPicture.asset(
             "assets/icons/close.svg",
             colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),

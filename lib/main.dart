@@ -18,10 +18,11 @@ void main() {
   runApp(
    GetMaterialApp(
       translations: Languages(),
-      locale: GameConfig.hebrewIlLocale,
+      // locale: GameConfig.hebrewIlLocale,
+      locale: GameConfig.englishUsLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
-      title: "Trivia Guru",
+      title: GameConfig.appTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: GameConfig.currentLocale == GameConfig.hebrewIlLocale ? GameConfig.hebFontFamily : GameConfig.enFontFamily,

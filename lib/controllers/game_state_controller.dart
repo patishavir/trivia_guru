@@ -1,9 +1,15 @@
 import 'package:get/get.dart';
 import '../common/logging_utils.dart';
 
-enum GameStateEnum { displayQuestion, displayAnswer, clickNextButton, gameOver }
+enum GameStateEnum {
+  displayQuestion,
+  displayAnswer,
+  clickNextButton,
+  clickRightWrongButton,
+  gameOver
+}
 
-class GameStateController extends GetxController{
+class GameStateController extends GetxController {
   final _gameState = GameStateEnum.displayQuestion.obs;
 
   GameStateEnum get gameState {
@@ -11,7 +17,7 @@ class GameStateController extends GetxController{
     return _gameState.value;
   }
 
-  void setGameState (GameStateEnum gameStateParam) {
+  void setGameState(GameStateEnum gameStateParam) {
     _gameState.value = gameStateParam;
     LoggingUtils.writeLog("set _gameState to $_gameState.value  !");
   }
