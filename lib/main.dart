@@ -19,7 +19,7 @@ void main() {
    GetMaterialApp(
       translations: Languages(),
       // locale: GameConfig.hebrewIlLocale,
-      locale: GameConfig.englishUsLocale,
+      locale: GameConfig.currentLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
       title: GameConfig.appTitle,

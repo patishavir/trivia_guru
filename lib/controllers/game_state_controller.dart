@@ -4,16 +4,13 @@ import '../common/logging_utils.dart';
 enum GameStateEnum {
   displayQuestion,
   displayAnswer,
-  clickNextButton,
-  clickRightWrongButton,
-  gameOver
 }
 
 class GameStateController extends GetxController {
   final _gameState = GameStateEnum.displayQuestion.obs;
 
   GameStateEnum get gameState {
-    LoggingUtils.writeLog("gameState: $_gameState");
+    LoggingUtils.writeLog("get gameState: $_gameState");
     return _gameState.value;
   }
 

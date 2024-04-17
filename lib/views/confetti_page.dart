@@ -75,6 +75,7 @@ class ConfettiPageState extends State<ConfettiPage> {
             ),
             buildConfettiWidget(confettiController, pi / 1),
             buildConfettiWidget(confettiController, pi / 4),
+            buildConfettiWidget(confettiController, pi / 2),
           ],
         ),
       ),

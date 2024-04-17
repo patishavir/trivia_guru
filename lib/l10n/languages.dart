@@ -6,7 +6,7 @@ class Languages extends Translations {
         'en_US': {
           "select_an_answer": "Select an answer",
           "app_title": "Trivia King",
-          "score": "Score",
+          "score": "Score: ",
           "summary_line":
               "You have answered correctly @correctAnswers out of @questionsPerGame questions !",
           "next_question": "Next question",
@@ -21,7 +21,7 @@ class Languages extends Translations {
         'he_IL': {
           "select_an_answer": "בחר תשובה",
           "app_title": "אלוף הטריוויה",
-          "score": "תוצאה",
+          "score": "תוצאה: ",
           "summary_line":
               "ענית נכון על correctAnswers@ מתוך questionsPerGame@ שאלות !",
           "next_question": "השאלה הבאה",
