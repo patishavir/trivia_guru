@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
 import 'package:get/get.dart';
+import '../common/gui_utils.dart';
 
 class GameOver extends StatelessWidget {
   String myText;
@@ -24,7 +25,7 @@ class GameOver extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: Colors.red),
               borderRadius: BorderRadius.circular(20),
-              color: Colors.grey,
+              color: blue_255,
             ),
             child: Center(
               child: FittedBox(
@@ -32,8 +33,8 @@ class GameOver extends StatelessWidget {
                 child: BlinkText(myText.tr,
                     style:  TextStyle( fontSize:  MediaQuery.of(context).size.width/10,
                         fontWeight: FontWeight.bold, color: Colors.redAccent),
-                    beginColor: Colors.blue.shade900,
-                    endColor: Colors.orange,
+                    beginColor: Colors.grey.shade900,
+                    endColor: Colors.white,
                     times: 5,
                     duration: const Duration(seconds: 1)),
               ),

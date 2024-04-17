@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
       margin: const EdgeInsets.all(4.0),
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 0, 255),
+        color:  blue_255,
         border: Border.all(color: Colors.black, width: 1.0),
       ),
       child: Text(
