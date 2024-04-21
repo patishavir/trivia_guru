@@ -27,19 +27,16 @@ class HomePage extends StatelessWidget {
     return Obx(
       () => Container(
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.red, width: 1.0),
+          border: Border.all(color: Colors.grey.shade400, width: 5.0),
+          borderRadius: BorderRadius.circular(20.0), // Uniform radius
         ),
         constraints: const BoxConstraints(maxWidth: 400.0, maxHeight: 800.0),
         child: Scaffold(
           appBar: AppBar(
-            // title: Text(widget.title),
-            // title: Text(
-            //   "app_title".tr,
-            // ),
             title: Text(
               "app_title".tr,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.red),
+              style:
+                  const TextStyle(fontWeight: FontWeight.bold, color: blue_255),
             ),
             centerTitle: true,
           ),
@@ -98,6 +95,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget getQuestionImage(String imageName) {
+    Size size = getSize(context);
     return Center(
       child: SizedBox(
         width: 200.0,
@@ -115,7 +113,7 @@ class HomePage extends StatelessWidget {
       margin: const EdgeInsets.all(4.0),
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color:  blue_255,
+        color: blue_255,
         border: Border.all(color: Colors.black, width: 1.0),
       ),
       child: Text(
@@ -214,8 +212,7 @@ class HomePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          //  const Spacer(),
-          Text("score".tr, style: Theme.of(context).textTheme.bodyLarge),
+          Text("score".tr, style: const TextStyle(color: blue_255, fontSize: GameConfig.fontSize, fontWeight: FontWeight.bold)),
           Text(
             Score.correctAnswers.toString(),
             style: const TextStyle(

@@ -5,7 +5,7 @@ class GameConfig {
   static const bool writeLog = true;
   static const bool multipleChoiceQuestions = false;
   static const int answersCount = 4;
-  static const double fontSize = 24.0;
+  static const double fontSize = 16.0;
   static const String hebFontFamily = "gadi-almog";
   static const String enFontFamily = "NovaSlim";
   static const int questionsPerGame = 2;

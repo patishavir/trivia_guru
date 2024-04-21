@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import './logging_utils.dart';
 
 Size getSize(BuildContext context) {
-  return MediaQuery.of(context).size;
+  Size size = MediaQuery.of(context).size;
+  LoggingUtils.writeLog("size: width=${size.width} height=${size.height}");
+  return size;
 }
-Color blue_255 = const Color.fromARGB(255, 0, 0, 255);
+const Color blue_255 = Color.fromARGB(255, 0, 0, 255);
