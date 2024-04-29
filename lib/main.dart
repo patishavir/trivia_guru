@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
+import 'package:trivia_guru/views/game_over.dart';
 import './config/game_config.dart';
-import './config/session_data.dart';
 import './utils/questions_utils.dart';
 import './views/home_page.dart';
 import './views/confetti_page.dart';
@@ -10,21 +10,22 @@ import './l10n/languages.dart';
 
 void main() {
   final routes = [
-    GetPage(name: '/ConfettiPage', page: () => const ConfettiPage()),
-    GetPage(name: '/HomePage', page: () => const HomePage()),
+    GetPage(name: '/confettiPage', page: () => const ConfettiPage()),
+    GetPage(name: '/homePage', page: () => HomePage()),
+    GetPage(name: '/gameOver', page: () =>  GameOver(myText: 'game_over')),
+    GetPage(name: '/outOfQuestions', page: () =>  GameOver(myText: 'out_of_questions')),
   ];
   runApp(
-    GetMaterialApp(
+   GetMaterialApp(
       translations: Languages(),
-      locale: Get.deviceLocale,
-      // locale: GameConfig.defaultLocale,
-      // fallbackLocale:  GameConfig.fallbackLocale,
+      // locale: GameConfig.hebrewIlLocale,
+      locale: GameConfig.currentLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
-      title: "Trivia Guru",
+      title: GameConfig.appTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: GameConfig.fontFamily,
+        fontFamily: GameConfig.currentLocale == GameConfig.hebrewIlLocale ? GameConfig.hebFontFamily : GameConfig.enFontFamily,
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
           labelLarge: TextStyle(fontSize: GameConfig.fontSize),
@@ -45,14 +46,11 @@ class RouteSplashState extends State<RouteSplash> {
   @override
   void initState() {
     super.initState();
-    SessionData.initSessionData();
     rootBundle.loadString(GameConfig.questionsFilePath).then(
       (String jsonString) {
         QuestionsUtils.jsonString = jsonString;
         QuestionsUtils.buildQuestionListFromJsonString();
-        // Navigator.of(context).push(
-        //    MaterialPageRoute(builder: (context) => const QuestionFormApp()));
-        Get.off(() => const HomePage());
+        Get.offAllNamed('/homePage');
       },
     ); //running initialisation code; getting prefs etc.
   }

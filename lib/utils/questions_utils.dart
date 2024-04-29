@@ -21,7 +21,8 @@ class QuestionsUtils {
       LoggingUtils.writeLog(question.question);
     }
   }
-  static get questionsList => _questionsList;
+
+  static get questionsListLength => _questionsList.length;
 
   static Question getQuestion(int questionIndex) {
     LoggingUtils.writeLog(
