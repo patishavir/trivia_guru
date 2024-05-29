@@ -1,6 +1,6 @@
 import 'dart:core';
 import "dart:convert";
-import '../common/logging_utils.dart';
+import 'package:common_code/common_code.dart';
 
 class Question {
   String question;

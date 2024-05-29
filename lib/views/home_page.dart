@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:common_code/common_code.dart';
+import '../config/app_config.dart';
+import '../controllers/game_state_controller.dart';
 import '../model/score.dart';
-import '../common/logging_utils.dart';
-import '../common/gui_utils.dart';
-import '../config/game_config.dart';
 import '../model/session_data.dart';
 import '../model/question.dart';
 import '../utils/questions_utils.dart';
-import '../controllers/game_state_controller.dart';
+
 
 class HomePage extends StatelessWidget {
   late BuildContext context;
@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
       getSelectAnAnswerWidget(),
     );
 
-    if (GameConfig.multipleChoiceQuestions) {
+    if (AppConfig.multipleChoiceQuestions) {
       widgetList.addAll(getAnswerButtons());
     }
     // add answer text, image
@@ -86,7 +86,7 @@ class HomePage extends StatelessWidget {
         widgetList.add(getQuestionImage(question.aimage));
       }
       widgetList.add(getAnswerTextWidget());
-      if (!GameConfig.multipleChoiceQuestions) {
+      if (!AppConfig.multipleChoiceQuestions) {
         widgetList.add(getRightWrongAnswerButtons());
       }
     }
@@ -100,7 +100,7 @@ class HomePage extends StatelessWidget {
       child: SizedBox(
         width: 200.0,
         height: 200.0,
-        child: Image.asset('${GameConfig.imagesFolderFilePath}/$imageName',
+        child: Image.asset('${AppConfig.imagesFolderFilePath}/$imageName',
             fit: BoxFit.fill),
       ),
     );
@@ -119,7 +119,7 @@ class HomePage extends StatelessWidget {
       child: Text(
         question.question,
         style:
-            const TextStyle(fontSize: GameConfig.fontSize, color: Colors.white),
+            const TextStyle(fontSize: AppConfig.fontSize, color: Colors.white),
       ),
     );
   }
@@ -128,14 +128,14 @@ class HomePage extends StatelessWidget {
     LoggingUtils.writeLog(
         "Starting getSelectAnAnswerRow in home_page_widgets ...");
     List<Widget> widgets = [];
-    if (GameConfig.multipleChoiceQuestions) {
+    if (AppConfig.multipleChoiceQuestions) {
       // multiple choice processing
       if (gameStateController.gameState == GameStateEnum.displayQuestion) {
         widgets.add(
           Text(
             "select_an_answer".tr,
             style: const TextStyle(
-              fontSize: GameConfig.fontSize,
+              fontSize: AppConfig.fontSize,
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 0, 0, 255),
               backgroundColor: Colors.white,
@@ -153,7 +153,7 @@ class HomePage extends StatelessWidget {
               child: Text(
                 "${"next_question".tr} >",
                 style: const TextStyle(
-                    fontSize: GameConfig.fontSize,
+                    fontSize: AppConfig.fontSize,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 0, 0, 255)),
               ),
@@ -179,7 +179,7 @@ class HomePage extends StatelessWidget {
               child: Text(
                 "show_answer".tr,
                 style: const TextStyle(
-                    fontSize: GameConfig.fontSize,
+                    fontSize: AppConfig.fontSize,
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 0, 0, 255)),
               ),
@@ -194,7 +194,7 @@ class HomePage extends StatelessWidget {
           Text(
             "grade_your_answer".tr,
             style: const TextStyle(
-              fontSize: GameConfig.fontSize,
+              fontSize: AppConfig.fontSize,
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 0, 0, 255),
               backgroundColor: Colors.white,
@@ -212,11 +212,11 @@ class HomePage extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text("score".tr, style: const TextStyle(color: blue_255, fontSize: GameConfig.fontSize, fontWeight: FontWeight.bold)),
+          Text("score".tr, style: const TextStyle(color: blue_255, fontSize: AppConfig.fontSize, fontWeight: FontWeight.bold)),
           Text(
             Score.correctAnswers.toString(),
             style: const TextStyle(
-                fontSize: GameConfig.fontSize,
+                fontSize: AppConfig.fontSize,
                 backgroundColor: Colors.green,
                 color: Colors.white),
           ),
@@ -226,7 +226,7 @@ class HomePage extends StatelessWidget {
           Text(
             Score.wrongAnswers.toString(),
             style: const TextStyle(
-                fontSize: GameConfig.fontSize,
+                fontSize: AppConfig.fontSize,
                 backgroundColor: Colors.red,
                 color: Colors.white),
           ),
@@ -245,7 +245,7 @@ class HomePage extends StatelessWidget {
       question.answer3,
       question.answer4
     ];
-    for (int i = 0; i < GameConfig.answersCount; i++) {
+    for (int i = 0; i < AppConfig.answersCount; i++) {
       LoggingUtils.writeLog('building answer button number: $i');
       Color? buttonColor = Colors.grey[400];
       if (i == SessionData.selectedAnswer - 1) {
@@ -269,7 +269,7 @@ class HomePage extends StatelessWidget {
             child: Text(
               answers[i],
               style: const TextStyle(
-                  color: Colors.black, fontSize: GameConfig.fontSize),
+                  color: Colors.black, fontSize: AppConfig.fontSize),
             ),
           ),
         ),
@@ -290,7 +290,7 @@ class HomePage extends StatelessWidget {
             processNextQuestionButtonPress();
           },
           icon: SvgPicture.asset(
-            "${GameConfig.iconsFolderFilePath}/check_box.svg",
+            "${AppConfig.iconsFolderFilePath}/check_box.svg",
             colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),
             semanticsLabel: 'Correct answer',
             width: iconWidth,
@@ -303,7 +303,7 @@ class HomePage extends StatelessWidget {
             processNextQuestionButtonPress();
           },
           icon: SvgPicture.asset(
-            "${GameConfig.iconsFolderFilePath}/close.svg",
+            "${AppConfig.iconsFolderFilePath}/close.svg",
             colorFilter: const ColorFilter.mode(Colors.red, BlendMode.srcIn),
             semanticsLabel: 'Wrong answer',
             width: iconWidth,
@@ -344,8 +344,8 @@ class HomePage extends StatelessWidget {
   void processNextQuestionButtonPress() {
     SessionData.incrementCurrentQuestionIndex();
     LoggingUtils.writeLog(
-        "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${GameConfig.questionsPerGame}");
-    if ((SessionData.currentGameQuestionIndex) >= GameConfig.questionsPerGame) {
+        "Starting processNextQuestionButtonPress in home_page ... SessionData.currentQuestionIndex: ${SessionData.currentQuestionIndex}  GameConfig.questionsPerGame: ${AppConfig.questionsPerGame}");
+    if ((SessionData.currentGameQuestionIndex) >= AppConfig.questionsPerGame) {
       Get.offAllNamed('/confettiPage');
     } else if ((SessionData.currentQuestionIndex) >=
         QuestionsUtils.questionsListLength) {

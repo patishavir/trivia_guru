@@ -1,6 +1,6 @@
 import 'dart:convert';
 import '../model/question.dart';
-import '../common/logging_utils.dart';
+import 'package:common_code/common_code.dart';
 
 class QuestionsUtils {
   static List<Question> _questionsList = [];

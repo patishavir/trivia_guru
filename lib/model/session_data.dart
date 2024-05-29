@@ -1,4 +1,4 @@
-import '../common/logging_utils.dart';
+import 'package:common_code/common_code.dart';
 
 class SessionData {
   static int selectedAnswer = 0;

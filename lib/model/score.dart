@@ -1,6 +1,5 @@
 import 'package:trivia_guru/model/ScoreHistory.dart';
-
-import '../common/logging_utils.dart';
+import 'package:common_code/common_code.dart';
 
 class Score {
   static int _correctAnswers = 0;

@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:trivia_guru/model/session_data.dart';
 import 'package:trivia_guru/model/ScoreHistory.dart';
 import '../model/score.dart';
-import '../config/game_config.dart';
-import '../common/logging_utils.dart';
+import '../config/app_config.dart';
+import 'package:common_code/common_code.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
@@ -43,10 +43,10 @@ class ConfettiPageState extends State<ConfettiPage> {
     LoggingUtils.writeLog("start building ConfettiPageState ...");
     String summaryLine = "summary_line".trParams({
       'correctAnswers': '${Score.correctAnswers}',
-      'questionsPerGame': '${GameConfig.questionsPerGame}'
+      'questionsPerGame': '${AppConfig.questionsPerGame}'
     });
     summaryLine = summaryLine.replaceAll(
-        "questionsPerGame@", GameConfig.questionsPerGame.toString());
+        "questionsPerGame@", AppConfig.questionsPerGame.toString());
     summaryLine = summaryLine.replaceAll(
         "correctAnswers@", Score.correctAnswers.toString());
     return Scaffold(
@@ -66,7 +66,7 @@ class ConfettiPageState extends State<ConfettiPage> {
               child: BlinkText(
                 summaryLine,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: GameConfig.fontSize),
+                style: const TextStyle(fontSize: AppConfig.fontSize),
                 beginColor: Colors.yellowAccent,
                 endColor: Colors.white,
                 times: 200,
@@ -111,7 +111,7 @@ class ConfettiPageState extends State<ConfettiPage> {
 
   Future<void> stopController() {
     return Future.delayed(
-        const Duration(seconds: GameConfig.confettiAnimationDuration), () {
+        const Duration(seconds: AppConfig.confettiAnimationDuration), () {
       confettiController.stop();
       //     Navigator.of(context).pop();
       showAlertDialog();
@@ -134,7 +134,7 @@ class ConfettiPageState extends State<ConfettiPage> {
                   ScoreHistory scoreHistory = ScoreHistory(
                       Score.correctAnswers,
                       Score.wrongAnswers,
-                      GameConfig.questionsPerGame,
+                      AppConfig.questionsPerGame,
                       DateTime.now().millisecondsSinceEpoch);
                   Score.addToHistory(scoreHistory);
                   Score.resetCorrectAnswers();

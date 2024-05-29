@@ -22,6 +22,10 @@ dependencies:
   path: ^1.8.3
   get: ^4.6.6
   flutter_svg: ^2.0.10+1
+  common_code:
+    git:
+      url: https://github.com/patishavir/common_code.git
+      ref: dev    #branch name
 
 dev_dependencies:
   flutter_test:

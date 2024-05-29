@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import 'package:trivia_guru/views/game_over.dart';
-import './config/game_config.dart';
+import './config/app_config.dart';
 import './utils/questions_utils.dart';
 import './views/home_page.dart';
 import './views/confetti_page.dart';
@@ -19,16 +19,16 @@ void main() {
    GetMaterialApp(
       translations: Languages(),
       // locale: GameConfig.hebrewIlLocale,
-      locale: GameConfig.currentLocale,
+      locale: AppConfig.currentLocale,
       getPages: routes,
       debugShowCheckedModeBanner: false,
-      title: GameConfig.appTitle,
+      title: AppConfig.appTitle,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        fontFamily: GameConfig.currentLocale == GameConfig.hebrewIlLocale ? GameConfig.hebFontFamily : GameConfig.enFontFamily,
+        fontFamily: AppConfig.currentLocale == AppConfig.hebrewIlLocale ? AppConfig.hebFontFamily : AppConfig.enFontFamily,
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: GameConfig.fontSize),
-          labelLarge: TextStyle(fontSize: GameConfig.fontSize),
+          bodyLarge: TextStyle(fontSize: AppConfig.fontSize),
+          labelLarge: TextStyle(fontSize: AppConfig.fontSize),
         ),
       ),
       home: const RouteSplash(),
@@ -46,7 +46,7 @@ class RouteSplashState extends State<RouteSplash> {
   @override
   void initState() {
     super.initState();
-    rootBundle.loadString(GameConfig.questionsFilePath).then(
+    rootBundle.loadString(AppConfig.questionsFilePath).then(
       (String jsonString) {
         QuestionsUtils.jsonString = jsonString;
         QuestionsUtils.buildQuestionListFromJsonString();
