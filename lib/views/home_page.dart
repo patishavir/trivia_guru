@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:common_code/common_code.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
 import '../config/app_config.dart';
-import '../controllers/game_state_controller.dart';
+import '../controllers/app_state_controller.dart';
 import '../model/score.dart';
 import '../model/session_data.dart';
-import '../model/question.dart';
 import '../utils/questions_utils.dart';
 
 
@@ -40,15 +40,17 @@ class HomePage extends StatelessWidget {
             ),
             centerTitle: true,
           ),
-          body: Center(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: getWidgetList(),
+          body: SafeArea(
+            child: Center(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: getWidgetList(),
+                  ),
                 ),
               ),
             ),
@@ -65,7 +67,7 @@ class HomePage extends StatelessWidget {
     question = QuestionsUtils.getQuestion(SessionData.currentQuestionIndex);
 
     if (gameStateController.gameState == GameStateEnum.displayQuestion &&
-        question.qimage!.isNotEmpty) {
+        question.qimage.isNotEmpty) {
       widgetList.add(getQuestionImage(question.qimage));
     }
 
@@ -82,7 +84,7 @@ class HomePage extends StatelessWidget {
     }
     // add answer text, image
     if (gameStateController.gameState == GameStateEnum.displayAnswer) {
-      if (question.aimage!.isNotEmpty) {
+      if (question.aimage.isNotEmpty) {
         widgetList.add(getQuestionImage(question.aimage));
       }
       widgetList.add(getAnswerTextWidget());
@@ -95,8 +97,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget getQuestionImage(String imageName) {
-    Size size = getSize(context);
-    return Center(
+   return Center(
       child: SizedBox(
         width: 200.0,
         height: 200.0,
@@ -148,7 +149,7 @@ class HomePage extends StatelessWidget {
             padding: EdgeInsets.only(top: getSize(context).height / 20.0),
             child: ElevatedButton(
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
               ),
               child: Text(
                 "${"next_question".tr} >",
@@ -174,7 +175,7 @@ class HomePage extends StatelessWidget {
                 EdgeInsets.only(top: MediaQuery.of(context).size.height / 20.0),
             child: ElevatedButton(
               style: const ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll<Color>(Colors.white),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
               ),
               child: Text(
                 "show_answer".tr,

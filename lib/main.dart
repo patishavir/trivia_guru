@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import 'package:trivia_guru/views/game_over.dart';
+
 import './config/app_config.dart';
-import './utils/questions_utils.dart';
-import './views/home_page.dart';
-import './views/confetti_page.dart';
 import './l10n/languages.dart';
+import './utils/questions_utils.dart';
+import './views/confetti_page.dart';
+import './views/home_page.dart';
 
 void main() {
   final routes = [

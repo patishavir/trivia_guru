@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:blinking_text/blinking_text.dart';
-import 'package:get/get.dart';
 import 'package:common_code/common_code.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class GameOver extends StatelessWidget {
   String myText;

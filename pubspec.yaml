@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.2.3
+  sdk: ^3.4.0
 
 dependencies:
   flutter:
@@ -17,7 +17,7 @@ dependencies:
   build_runner: ^2.4.8
   build_web_compilers: ^4.0.9
   confetti: ^0.7.0
-  blinking_text: ^1.0.2
+  blinking_text: ^1.0.0
   path_provider: ^2.1.2
   path: ^1.8.3
   get: ^4.6.6

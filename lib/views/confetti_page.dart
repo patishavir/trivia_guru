@@ -1,13 +1,15 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
+
 import 'package:blinking_text/blinking_text.dart';
-import 'package:confetti/confetti.dart';
-import 'package:get/get.dart';
-import 'package:trivia_guru/model/session_data.dart';
-import 'package:trivia_guru/model/ScoreHistory.dart';
-import '../model/score.dart';
-import '../config/app_config.dart';
 import 'package:common_code/common_code.dart';
+import 'package:confetti/confetti.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:trivia_guru/model/ScoreHistory.dart';
+import 'package:trivia_guru/model/session_data.dart';
+
+import '../config/app_config.dart';
+import '../model/score.dart';
 
 class ConfettiPage extends StatefulWidget {
   const ConfettiPage({super.key});
