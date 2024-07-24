@@ -1,5 +1,5 @@
-import 'package:get/get.dart';
 import 'package:common_code/common_code.dart';
+import 'package:get/get.dart';
 
 enum GameStateEnum {
   displayQuestion,
